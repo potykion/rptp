@@ -1,28 +1,46 @@
 import logging
 import os
-import random
 
 import rptp
-from rptp import Browser
 
 logging.getLogger().setLevel(logging.INFO)
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 
 if __name__ == '__main__':
-    actresses = rptp.load_actresses()
-    random.shuffle(actresses)
-    actresses = iter(actresses)
+    print('Wellcome to RPTP-2')
+    print()
+    print('New features:')
+    print(" - Enter 'low' or 'l' to decrease actress priority")
+    print()
 
-    browser = None
+    print('Loading actresses...')
 
-    while True:
-        command = input('Enter "next" to search videos with another actress:\n')
-        if command == "next":
-            actress = next(actresses)
-            if not browser:
-                browser = Browser()
+    with rptp.ActressManager() as manager:
+        actress = manager.random_actress()
+        print('Randomly picked actress - {}'.format(actress['name']))
+
+        print('Loading browser...')
+
+        with rptp.Browser() as browser:
             browser.search_videos(actress['name'])
-        else:
-            if browser:
-                browser.close()
-            break
+
+            command = None
+
+            while True:
+                # receive command
+                if command is None:
+                    command = input('Type "Enter" to search videos with another actress:\n')
+
+                # process command
+                if command == '':
+                    actress = manager.random_actress()
+                    print(actress['name'])
+                    browser.search_videos(actress['name'])
+
+                    command = None
+                elif command in ('l', 'low'):
+                    actress['priority'] -= 1
+
+                    command = ''
+                else:
+                    break

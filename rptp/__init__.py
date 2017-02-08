@@ -1,2 +1,2 @@
-from .actress import load_actresses
+from .actress import ActressManager
 from .browser import Browser

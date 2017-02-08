@@ -1,6 +1,9 @@
+import logging
 from selenium import webdriver
 import time
 from urllib.parse import urlencode
+
+from selenium.common.exceptions import WebDriverException
 
 from rptp.config import LOGIN, PASSWORD
 
@@ -27,7 +30,13 @@ def _wait_page_loaded(func):
 class Browser:
     def __init__(self):
         self.driver = webdriver.Chrome()
+
+    def __enter__(self):
         self.login_to_vk()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
 
     @_wait_page_loaded
     def login_to_vk(self, login=LOGIN, password=PASSWORD):
@@ -53,4 +62,8 @@ class Browser:
             self.driver.get(url)
 
     def close(self):
-        self.driver.close()
+        try:
+            self.driver.close()
+        except WebDriverException as e:
+            # browser is already closed
+            logging.info(e)

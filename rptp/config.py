@@ -2,6 +2,7 @@ import os
 
 DATA_FOLDER = 'data/'
 ACTRESS_BASE_PATH = DATA_FOLDER + 'actresses.json'
+SESSION_BASE_PATH = DATA_FOLDER + 'sessions.json'
 LOGIN_FILE = DATA_FOLDER + 'login.txt'
 
 LOGIN = ''

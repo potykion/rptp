@@ -30,10 +30,6 @@ class Actress:
         return self.name
 
 
-class NoMoreActressException(Exception):
-    pass
-
-
 class ActressManager:
     def __init__(self):
         self.actresses = []
@@ -55,7 +51,7 @@ class ActressManager:
 
         while True:
             if len(self.used_actresses) == len(self.actresses):
-                raise NoMoreActressException('No more models to pick including low-priority ones.')
+                raise LookupError('No more models to pick including low-priority ones.')
 
             actress = random.choice(self.actresses)
 

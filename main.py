@@ -29,20 +29,19 @@ if __name__ == '__main__':
             command = None
 
             while True:
-                # receive command
                 if command is None:
                     command = input(TYPE_TEXT)
 
-                # process command
                 if command == '':
                     actress = manager.random_actress()
                     print(actress)
-                    browser.search_videos(actress.name)
-
-                    command = None
+                    successfully = browser.search_videos(actress.name)
+                    if not successfully:
+                        print('Ooops! Browser was closed!')
+                        break
                 elif command in ('l', 'low'):
                     actress.priority -= 1
-
-                    command = ''
                 else:
                     break
+
+                command = None

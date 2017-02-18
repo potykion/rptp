@@ -1,9 +1,9 @@
-import json
 import os
 import random
-from itertools import chain
+from itertools import chain, groupby
 from threading import Thread
 
+from rptp.utils import load_json_list, save_as_json
 from .config import ACTRESS_BASE_PATH
 from .web import bs_from_url
 
@@ -43,42 +43,36 @@ class ActressManager:
         self._update_actresses(self.used_actresses)
 
     def random_actress(self):
-        def low_priority_actress_can_be_picked():
-            return len(self.used_actresses) == \
-                   len(self.actresses) - len(low_priority_actresses)
+        not_used_actresses = [a for a in self.actresses if a not in self.used_actresses]
 
-        low_priority_actresses = [a for a in self.actresses if a.priority < 0]
+        if not not_used_actresses:
+            raise LookupError('No more models to pick including low-priority ones.')
 
-        while True:
-            if len(self.used_actresses) == len(self.actresses):
-                raise LookupError('No more models to pick including low-priority ones.')
+        key_func = lambda a: a.priority
+        sorted_actresses = sorted(not_used_actresses, key=key_func, reverse=True)
+        priority, actress_grouper = next(groupby(sorted_actresses, key_func))
+        actresses = list(actress_grouper)
 
-            actress = random.choice(self.actresses)
+        actress = random.choice(actresses)
+        self.used_actresses.append(actress)
 
-            priority_checked = actress not in low_priority_actresses or \
-                               actress in low_priority_actresses and low_priority_actress_can_be_picked()
-
-            if priority_checked and actress not in self.used_actresses:
-                self.used_actresses.append(actress)
-                return actress
+        return actress
 
     def load_actresses(self):
         if os.path.exists(ACTRESS_BASE_PATH):
-            self._set_actresses_from_json()
+            json_actresses = load_json_list(ACTRESS_BASE_PATH)
             self._sync_actress_base(other_thread=True)
         else:
             self._sync_actress_base(other_thread=False)
-            self._set_actresses_from_json()
+            json_actresses = load_json_list(ACTRESS_BASE_PATH)
 
-    def _set_actresses_from_json(self, json_file=ACTRESS_BASE_PATH):
-        with open(json_file) as f:
-            self.actresses = list(map(Actress.from_json, json.load(f)))
+        self.actresses = list(map(Actress.from_json, json_actresses))
 
     def _sync_actress_base(self, other_thread=False):
         if other_thread:
             Thread(target=self._sync_actress_base).start()
         else:
-            parsed_actresses = list(_parse_actress_page(ACTRESS_BASE_PAGE))
+            parsed_actresses = _parse_actress_page(ACTRESS_BASE_PAGE)
             self._extend_actresses(parsed_actresses)
 
     def _extend_actresses(self, actresses):
@@ -103,8 +97,7 @@ class ActressManager:
 
         actresses = [a.to_json() for a in actresses]
 
-        with open(json_file, 'w') as f:
-            json.dump(actresses, f)
+        save_as_json(actresses, json_file)
 
 
 def _parse_actress_page(page_url):

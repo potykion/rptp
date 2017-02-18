@@ -34,6 +34,13 @@ class VideoWatcher(Thread):
 
     def run(self):
         start_timestamp = datetime.now().timestamp()
+        queries = self._watch_for_videos()
+
+        if queries:
+            session = (start_timestamp, {query: list(videos) for query, videos in queries.items()})
+            update_json_list([session], SESSION_BASE_PATH)
+
+    def _watch_for_videos(self):
         queries = defaultdict(set)
 
         while True:
@@ -49,6 +56,4 @@ class VideoWatcher(Thread):
             else:
                 break
 
-        if queries:
-            session = (start_timestamp, {query: list(videos) for query, videos in queries.items()})
-            update_json_list([session], SESSION_BASE_PATH)
+        return queries

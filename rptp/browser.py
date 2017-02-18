@@ -1,4 +1,6 @@
 import time
+from http.client import CannotSendRequest
+from threading import Lock, RLock, current_thread
 from urllib.parse import urlencode
 
 from selenium import webdriver
@@ -17,6 +19,8 @@ DEFAULT_SEARCH_PARAMS = {
     'order': 0,
 }
 
+lock = Lock()
+
 
 class Browser:
     def __init__(self):
@@ -28,6 +32,10 @@ class Browser:
 
     def __enter__(self):
         self.login_to_vk()
+
+        if not self.watcher.is_alive():
+            self.watcher.start()
+
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -40,11 +48,11 @@ class Browser:
         self.driver.find_element_by_id('index_login_form').submit()
         time.sleep(2)
 
-    def search_videos(self, search_query, **search_params):
+    def search_videos(self, search_query):
         self.query = search_query
 
         try:
-            if VIDEO_URL in self.driver.current_url:
+            if VIDEO_URL in self.current_url:
                 search_field = self.driver.find_element_by_id('video_search_input')
                 search_field.clear()
                 search_field.send_keys(search_query)
@@ -52,14 +60,10 @@ class Browser:
             else:
                 # https://vk.com/video?hd=1&len=2&notsafe=1&order=0&q=Lika
                 params = DEFAULT_SEARCH_PARAMS.copy()
-                params.update(search_params)
                 params['q'] = search_query
 
                 url = '{}?{}'.format(VIDEO_URL, urlencode(params))
                 self.driver.get(url)
-
-            if not self.watcher.is_alive():
-                self.watcher.start()
 
             return True
         except WebDriverException:
@@ -71,8 +75,18 @@ class Browser:
         except WebDriverException:
             pass
 
+    @property
+    def current_url(self):
+        # =/
+        try:
+            with lock:
+                return self.driver.current_url
+        except CannotSendRequest:
+            time.sleep(1)
+            return self.current_url
+
     def get_info(self):
         try:
-            return self.query, self.driver.current_url
+            return self.query, self.current_url
         except WebDriverException:
-            return None
+            return ()

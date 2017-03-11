@@ -1,6 +1,6 @@
 # RPTP
 
-CLI app for picking random porn actress and search video with it via VK.
+CLI app for picking random pornstar and search video with it via VK.
 
 # Requirements
 

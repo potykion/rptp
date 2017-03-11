@@ -10,7 +10,8 @@ LOGIN_FILE = DATA_FOLDER + 'login.txt'
 LOGIN = ''
 PASSWORD = ''
 
-UPDATE_BASE = False
+UPDATE_BASE = True
+
 
 def load_login():
     global LOGIN, PASSWORD

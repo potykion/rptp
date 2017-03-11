@@ -4,7 +4,7 @@ from itertools import chain, groupby
 from threading import Thread
 
 from rptp.utils import load_json_list, save_as_json
-from .config import ACTRESS_BASE_PATH
+from .config import ACTRESS_BASE_PATH, UPDATE_BASE
 from .web import bs_from_url
 
 ACTRESS_BASE_PAGE = 'http://www.pornteengirl.com/debutyear/debut.html'
@@ -61,7 +61,9 @@ class ActressManager:
     def load_actresses(self):
         if os.path.exists(ACTRESS_BASE_PATH):
             json_actresses = load_json_list(ACTRESS_BASE_PATH)
-            self._sync_actress_base(other_thread=True)
+
+            if UPDATE_BASE:
+                self._sync_actress_base(other_thread=True)
         else:
             self._sync_actress_base(other_thread=False)
             json_actresses = load_json_list(ACTRESS_BASE_PATH)
@@ -70,7 +72,7 @@ class ActressManager:
 
     def _sync_actress_base(self, other_thread=False):
         if other_thread:
-            Thread(target=self._sync_actress_base).start()
+            Thread(target=self._sync_actress_base, daemon=True).start()
         else:
             parsed_actresses = _parse_actress_page(ACTRESS_BASE_PAGE)
             self._extend_actresses(parsed_actresses)

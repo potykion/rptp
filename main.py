@@ -1,20 +1,41 @@
 import logging
 import os
 
+import sys
+from pynput import keyboard
+
+from rptp.texts import WELCOME_TEXT, COMMANDS
+
+dir_ = os.path.dirname(os.path.realpath(__file__))
+print(dir_)
+os.chdir(dir_)
+
 import rptp
 
-TYPE_TEXT = 'Type "Enter" to search videos with another actress or type one of the commands (e.g. \'l\')\n'
-
 logging.getLogger().setLevel(logging.INFO)
-os.chdir(os.path.dirname(os.path.realpath(__file__)))
+
+
+def on_press(key):
+    global actress
+
+    if key == keyboard.Key.esc:
+        raise InterruptedError('Bye-bye!')
+
+    elif key == keyboard.Key.enter:
+        actress = manager.random_actress()
+        print(actress)
+
+        successfully = browser.search_videos(actress.name)
+        if not successfully:
+            raise InterruptedError('Ooops! Browser was closed!')
+    elif key == keyboard.Key.space:
+        actress.priority -= 1
+        print('{} - priority lowered'.format(actress))
+        on_press(keyboard.Key.enter)
+
 
 if __name__ == '__main__':
-    print('Welcome to RPTP-2')
-    print()
-    print('New features:')
-    print(" - Enter 'low' or 'l' to decrease actress priority")
-    print()
-
+    print(WELCOME_TEXT)
     print('Loading actresses...')
 
     with rptp.ActressManager() as manager:
@@ -22,26 +43,13 @@ if __name__ == '__main__':
         print('Randomly picked actress - {}'.format(actress))
 
         print('Loading browser...')
-
         with rptp.Browser() as browser:
             browser.search_videos(actress.name)
+            print(COMMANDS)
 
-            command = None
-
-            while True:
-                if command is None:
-                    command = input(TYPE_TEXT)
-
-                if command == '':
-                    actress = manager.random_actress()
-                    print(actress)
-                    successfully = browser.search_videos(actress.name)
-                    if not successfully:
-                        print('Ooops! Browser was closed!')
-                        break
-                elif command in ('l', 'low'):
-                    actress.priority -= 1
-                else:
-                    break
-
-                command = None
+            with keyboard.Listener(on_press=on_press) as listener:
+                try:
+                    listener.join()
+                except InterruptedError as e:
+                    print(e)
+                    sys.exit(0)

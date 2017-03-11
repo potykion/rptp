@@ -1,6 +1,6 @@
 import time
 from http.client import CannotSendRequest
-from threading import Lock, RLock, current_thread
+from threading import Lock
 from urllib.parse import urlencode
 
 from selenium import webdriver

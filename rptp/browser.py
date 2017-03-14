@@ -1,6 +1,5 @@
 import time
-from http.client import CannotSendRequest
-from threading import Lock
+from http.client import CannotSendRequest, ResponseNotReady
 from urllib.parse import urlencode
 
 from selenium import webdriver
@@ -18,8 +17,6 @@ DEFAULT_SEARCH_PARAMS = {
     'notsafe': 1,
     'order': 0,
 }
-
-lock = Lock()
 
 
 class Browser:
@@ -77,11 +74,9 @@ class Browser:
 
     @property
     def current_url(self):
-        # =/
         try:
-            with lock:
-                return self.driver.current_url
-        except CannotSendRequest:
+            return self.driver.current_url
+        except (CannotSendRequest, ResponseNotReady):
             time.sleep(1)
             return self.current_url
 

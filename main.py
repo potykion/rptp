@@ -4,12 +4,11 @@ import os
 import sys
 from pynput import keyboard
 
-from rptp.texts import WELCOME_TEXT, COMMANDS
-
 dir_ = os.path.dirname(os.path.realpath(__file__))
 print(dir_)
 os.chdir(dir_)
 
+from rptp.texts import WELCOME_TEXT, COMMANDS
 import rptp
 
 logging.getLogger().setLevel(logging.INFO)

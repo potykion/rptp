@@ -65,6 +65,9 @@ class Browser:
             return True
         except WebDriverException:
             return False
+        except CannotSendRequest:
+            time.sleep(1)
+            self.search_videos(search_query)
 
     def close(self):
         try:

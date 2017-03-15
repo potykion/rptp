@@ -9,6 +9,8 @@ LOGIN_FILE = DATA_FOLDER + 'login.txt'
 
 LOGIN = ''
 PASSWORD = ''
+TOKEN = ''
+API_VERSION = '5.62'
 
 UPDATE_BASE = True
 

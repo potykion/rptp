@@ -35,8 +35,8 @@ def on_press(key):
 
 if __name__ == '__main__':
     print(WELCOME_TEXT)
-    print('Loading actresses...')
 
+    print('Loading actresses...')
     with rptp.ActressManager() as manager:
         actress = manager.random_actress()
         print('Randomly picked actress - {}'.format(actress))

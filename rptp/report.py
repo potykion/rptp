@@ -1,8 +1,7 @@
 import operator
 import time
-from collections import defaultdict
-from datetime import datetime
 
+from dateutil import parser
 from jinja2 import Template
 
 from rptp.vk import execute_api_request
@@ -28,12 +27,11 @@ def form_sessions_report(sessions):
 
 
 def format_sessions(sessions):
-    date_sessions = defaultdict(dict)
-    for session in sessions:
-        date_sessions[datetime.fromtimestamp(session[0]).date()].update({
-            actress: request_video_info(videos)
-            for actress, videos in session[1].items()
-        })
+    date_sessions = {
+        parser.parse(date_): request_video_info(videos)
+        for date_, videos in sessions.items()
+    }
+
     date_sessions = sorted(date_sessions.items(), key=operator.itemgetter(0), reverse=True)
     return date_sessions
 

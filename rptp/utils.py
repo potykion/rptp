@@ -19,3 +19,18 @@ def update_json_list(objects, path):
     loaded_objects = load_json_list(path)
     loaded_objects.extend(objects)
     save_as_json(loaded_objects, path)
+
+
+def load_json_dict(path):
+    if os.path.exists(path):
+        with open(path) as f:
+            return json.load(f)
+    else:
+        return {}
+
+
+def update_json_dict(dicts, path):
+    loaded_dict = load_json_dict(path)
+    for dict_ in dicts:
+        loaded_dict.update(dict_)
+    save_as_json(loaded_dict, path)

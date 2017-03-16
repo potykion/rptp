@@ -21,22 +21,20 @@
 </head>
 <body>
 <div class="container">
-    {% for timestamp, session in sessions %}
+    {% for date, videos in sessions %}
         <div class="card" style="margin: 10px">
             <div class="card-block">
-                <h4 class="card-title">{{ timestamp }}</h4>
+                <h4 class="card-title">{{ date }}</h4>
                 <div class="card-columns">
-                    {% for _, videos in session.items() %}
-                        {% for video in videos %}
-                            <div class="card">
-                                <a href="{{ video.url }}" target="_blank">
-                                    <img class="card-img-top img-fluid" src="{{ video.preview }}">
-                                </a>
-                                <div class="card-block">
-                                    <p class="card-text">{{ video.title }}</p>
-                                </div>
+                    {% for video in videos %}
+                        <div class="card">
+                            <a href="{{ video.url }}" target="_blank">
+                                <img class="card-img-top img-fluid" src="{{ video.preview }}">
+                            </a>
+                            <div class="card-block">
+                                <p class="card-text">{{ video.title }}</p>
                             </div>
-                        {% endfor %}
+                        </div>
                     {% endfor %}
                 </div>
             </div>

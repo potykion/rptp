@@ -1,15 +1,15 @@
 import re
 import time
+from collections import defaultdict
 from datetime import datetime
 from functools import lru_cache
+from itertools import chain
 from threading import Thread
 from urllib.parse import urlparse, parse_qs
 
-from collections import defaultdict
-
 from .browser import VIDEO_URL
 from .config import SESSION_BASE_PATH
-from .utils import update_json_list
+from .utils import update_json_dict
 
 
 @lru_cache(maxsize=None)
@@ -33,12 +33,12 @@ class VideoWatcher(Thread):
         self.browser = browser
 
     def run(self):
-        start_timestamp = datetime.now().timestamp()
         queries = self._watch_for_videos()
 
         if queries:
-            session = (start_timestamp, {query: list(videos) for query, videos in queries.items()})
-            update_json_list([session], SESSION_BASE_PATH)
+            date_str = str(datetime.now().date())
+            videos = list(chain.from_iterable(videos for _, videos in queries.items()))
+            update_json_dict({date_str: videos}, SESSION_BASE_PATH)
 
     def _watch_for_videos(self):
         queries = defaultdict(set)

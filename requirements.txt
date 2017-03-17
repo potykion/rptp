@@ -1,5 +1,5 @@
 jinja2
-dateutil
+python-dateutil
 beautifulsoup4==4.5.3
 bs4==0.0.1
 lxml==3.7.3
@@ -7,3 +7,4 @@ pynput==1.2
 requests==2.13.0
 selenium==3.0.2
 six==1.10.0
+vk

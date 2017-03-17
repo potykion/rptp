@@ -4,7 +4,7 @@ import time
 from dateutil import parser
 from jinja2 import Template
 
-from rptp.vk import execute_api_request
+from rptp.vk_api import find_videos
 
 SESSIONS_HTML = 'sessions.html'
 
@@ -28,7 +28,7 @@ def form_sessions_report(sessions):
 
 def format_sessions(sessions):
     date_sessions = {
-        parser.parse(date_): request_video_info(videos)
+        parser.parse(date_).date(): request_video_info(videos)
         for date_, videos in sessions.items()
     }
 
@@ -37,8 +37,7 @@ def format_sessions(sessions):
 
 
 def request_video_info(video_urls):
-    videos = execute_api_request('video.get', videos=','.join([video.strip('video') for video in video_urls]))['items']
-    time.sleep(0.5)
+    videos = find_videos([video.strip('video') for video in video_urls])
 
     video_info = []
 

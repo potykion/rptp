@@ -37,7 +37,7 @@ class VideoWatcher(Thread):
 
         if queries:
             date_str = str(datetime.now().date())
-            videos = list(chain.from_iterable(videos for _, videos in queries.items()))
+            videos = list(frozenset(chain.from_iterable(videos for _, videos in queries.items())))
             update_json_dict({date_str: videos}, SESSION_BASE_PATH)
 
     def _watch_for_videos(self):

@@ -1,35 +1,53 @@
 import os
 
 from rptp.texts import CANT_FIND_LOGIN_STRING
+from rptp.utils import split_strip
 
+# DATA
 DATA_FOLDER = 'data/'
 ACTRESS_BASE_PATH = DATA_FOLDER + 'actresses.json'
 SESSION_BASE_PATH = DATA_FOLDER + 'sessions.json'
 LOGIN_FILE = DATA_FOLDER + 'login.txt'
 
+# VK
 LOGIN = ''
 PASSWORD = ''
 TOKEN = ''
+APP_ID = '4865149'
+SCOPE = 'video, offline'
 API_VERSION = '5.62'
 
+# APP
 UPDATE_BASE = True
 
 
-def load_login():
-    global LOGIN, PASSWORD
+def set_up():
+    dir_ = os.path.dirname(os.path.relpath(__file__))
+    dir_ = os.path.join(dir_, '..')
+    os.chdir(dir_)
+
+    os.makedirs(DATA_FOLDER, exist_ok=True)
+
+    _load_login()
+
+
+def _load_login():
+    global LOGIN, PASSWORD, TOKEN
 
     login_string = 'sample_login, sample_pass'
 
     if os.path.exists(LOGIN_FILE):
         with open(LOGIN_FILE) as f:
-            login_string = f.read()
+            LOGIN, PASSWORD, TOKEN = split_strip(f.read())
     else:
         login_string = input(CANT_FIND_LOGIN_STRING.format(login_string)).strip(' "')
+        LOGIN, PASSWORD = split_strip(login_string)
+
+        from rptp.vk_api import request_token
+        TOKEN = request_token()
+
         with open(LOGIN_FILE, 'w') as f:
-            f.write(login_string)
-
-    LOGIN, PASSWORD = map(lambda login: login.strip(), login_string.split(','))
+            f.write(','.join([LOGIN, PASSWORD, TOKEN]))
 
 
-os.makedirs(DATA_FOLDER, exist_ok=True)
-load_login()
+set_up()

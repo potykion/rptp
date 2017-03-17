@@ -1,15 +1,10 @@
 import logging
-import os
-
 import sys
+
 from pynput import keyboard
 
-dir_ = os.path.dirname(os.path.realpath(__file__))
-print(dir_)
-os.chdir(dir_)
-
-from rptp.texts import WELCOME_TEXT, COMMANDS
 import rptp
+from rptp.texts import WELCOME_TEXT, COMMANDS
 
 logging.getLogger().setLevel(logging.INFO)
 

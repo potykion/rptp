@@ -16,7 +16,7 @@ from .utils import update_json_dict
 def extract_video_id(url):
     video_id = None
 
-    if VIDEO_URL in url:
+    if url and VIDEO_URL in url:
         parsed = urlparse(url)
         params = parse_qs(parsed.query)
         video_id = params.get('z', None)

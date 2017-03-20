@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def bs_from_url(url):
+def url_to_soup(url):
     resp = requests.get(url)
     content = resp.content
     bs = BeautifulSoup(content, "lxml")

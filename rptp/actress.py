@@ -5,7 +5,7 @@ from threading import Thread
 
 from rptp.utils import load_json_list, save_as_json
 from .config import ACTRESS_BASE_PATH, UPDATE_BASE
-from .web import bs_from_url
+from .web import url_to_soup
 
 ACTRESS_BASE_PAGE = 'http://www.pornteengirl.com/debutyear/debut.html'
 
@@ -103,7 +103,7 @@ class ActressManager:
 
 
 def _parse_actress_page(page_url):
-    bs = bs_from_url(page_url)
+    bs = url_to_soup(page_url)
 
     actress_blocks = bs.find(id='debut').find_all('tbody')
 

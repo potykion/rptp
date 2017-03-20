@@ -1,5 +1,4 @@
 import operator
-import time
 
 from dateutil import parser
 from jinja2 import Template

@@ -29,10 +29,9 @@ def load_json_dict(path):
         return {}
 
 
-def update_json_dict(dicts, path):
+def update_json_dict(dict_, path):
     loaded_dict = load_json_dict(path)
-    for dict_ in dicts:
-        loaded_dict.update(dict_)
+    loaded_dict.update(dict_)
     save_as_json(loaded_dict, path)
 
 

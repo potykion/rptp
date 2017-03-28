@@ -2,8 +2,8 @@ import json
 import os
 import webbrowser
 
-from rptp.config import SESSION_BASE_PATH, TOKEN
-from rptp.report import form_sessions_report, SESSIONS_HTML
+from rptp.config import SESSION_BASE_PATH, SESSIONS_HTML
+from rptp.report import form_sessions_report
 
 if __name__ == '__main__':
     if os.path.exists(SESSION_BASE_PATH):

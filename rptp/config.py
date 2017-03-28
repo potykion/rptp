@@ -1,7 +1,7 @@
 import os
 
-from rptp.texts import CANT_FIND_LOGIN_STRING
-from rptp.utils import split_strip
+from rptp.data.texts import CANT_FIND_LOGIN_STRING
+from rptp.utils.string_utils import split_strip
 
 # DATA
 DATA_FOLDER = 'data/'
@@ -19,7 +19,7 @@ API_VERSION = '5.62'
 
 # APP
 UPDATE_BASE = True
-
+SESSIONS_HTML = 'sessions.html'
 
 def set_up():
     dir_ = os.path.dirname(os.path.relpath(__file__))

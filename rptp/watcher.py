@@ -7,22 +7,22 @@ from itertools import chain
 from threading import Thread
 from urllib.parse import urlparse, parse_qs
 
-from .browser import VIDEO_URL
 from .config import SESSION_BASE_PATH
-from .utils import update_json_dict
+from .data.urls import VK_VIDEO_URL
+from .utils.file_utils import update_json_dict
 
 
 @lru_cache(maxsize=None)
 def extract_video_id(url):
     video_id = None
 
-    if url and VIDEO_URL in url:
+    if url and VK_VIDEO_URL in url:
         parsed = urlparse(url)
         params = parse_qs(parsed.query)
         video_id = params.get('z', None)
         if video_id:
             video_id = video_id[0]
-            assert re.match('video-?\d+_\d+', video_id)
+            assert re.match(r'video-?\d+_\d+', video_id)
 
     return video_id
 

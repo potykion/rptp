@@ -1,15 +1,14 @@
 import time
 from http.client import CannotSendRequest, ResponseNotReady
+from threading import Thread
 from urllib.parse import urlencode
 
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 
+from rptp.watcher import VideoWatcher
 from .config import LOGIN, PASSWORD
-
-BASE_URL = 'https://vk.com/'
-FEED_URL = BASE_URL + 'feed'
-VIDEO_URL = BASE_URL + 'video'
+from .data.urls import VK_BASE_URL, VK_VIDEO_URL
 
 DEFAULT_SEARCH_PARAMS = {
     'hd': 1,
@@ -19,15 +18,17 @@ DEFAULT_SEARCH_PARAMS = {
 }
 
 
-class Browser:
+class Browser(Thread):
     def __init__(self):
-        self.driver = webdriver.Chrome()
+        super().__init__()
+        self.driver = None
         self.query = ''
-
-        from .watcher import VideoWatcher
         self.watcher = VideoWatcher(self)
 
     def __enter__(self):
+        if not self.driver:
+            self.driver = webdriver.Chrome()
+
         self.login_to_vk()
 
         if not self.watcher.is_alive():
@@ -39,7 +40,7 @@ class Browser:
         self.close()
 
     def login_to_vk(self, login=LOGIN, password=PASSWORD):
-        self.driver.get(BASE_URL)
+        self.driver.get(VK_BASE_URL)
         self.driver.find_element_by_id("index_email").send_keys(login)
         self.driver.find_element_by_id("index_pass").send_keys(password)
         self.driver.find_element_by_id('index_login_form').submit()
@@ -49,7 +50,7 @@ class Browser:
         self.query = search_query
 
         try:
-            if VIDEO_URL in self.current_url:
+            if VK_VIDEO_URL in self.current_url:
                 search_field = self.driver.find_element_by_id('video_search_input')
                 search_field.clear()
                 search_field.send_keys(search_query)
@@ -59,7 +60,7 @@ class Browser:
                 params = DEFAULT_SEARCH_PARAMS.copy()
                 params['q'] = search_query
 
-                url = '{}?{}'.format(VIDEO_URL, urlencode(params))
+                url = '{}?{}'.format(VK_VIDEO_URL, urlencode(params))
                 self.driver.get(url)
 
             return True

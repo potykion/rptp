@@ -1,4 +1,5 @@
 import time
+
 import vk
 
 from rptp.config import TOKEN, SCOPE, APP_ID, PASSWORD, LOGIN, API_VERSION

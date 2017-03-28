@@ -4,7 +4,7 @@ import sys
 from pynput import keyboard
 
 import rptp
-from rptp.texts import WELCOME_TEXT, COMMANDS
+from rptp.data.texts import WELCOME_TEXT, COMMANDS
 
 logging.getLogger().setLevel(logging.INFO)
 
@@ -16,7 +16,7 @@ def on_press(key):
         raise InterruptedError('Bye-bye!')
 
     elif key == keyboard.Key.enter:
-        actress = manager.random_actress()
+        actress = manager.random_pick()
         print(actress)
 
         successfully = browser.search_videos(actress.name)
@@ -33,7 +33,7 @@ if __name__ == '__main__':
 
     print('Loading actresses...')
     with rptp.ActressManager() as manager:
-        actress = manager.random_actress()
+        actress = manager.random_pick()
         print('Randomly picked actress - {}'.format(actress))
 
         print('Loading browser...')

@@ -3,9 +3,8 @@ import operator
 from dateutil import parser
 from jinja2 import Template
 
-from rptp.vk_api import find_videos
-
-SESSIONS_HTML = 'sessions.html'
+from .config import SESSIONS_HTML
+from .vk_api import find_videos
 
 
 def form_sessions_report(sessions):

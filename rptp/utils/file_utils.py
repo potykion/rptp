@@ -35,5 +35,3 @@ def update_json_dict(dict_, path):
     save_as_json(loaded_dict, path)
 
 
-def split_strip(str_, delimiter=','):
-    return map(lambda login: login.strip(), str_.split(delimiter))

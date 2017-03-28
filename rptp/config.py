@@ -16,10 +16,18 @@ TOKEN = ''
 APP_ID = '4865149'
 SCOPE = 'video, offline'
 API_VERSION = '5.62'
+DEFAULT_SEARCH_PARAMS = {
+    'hd': 1,
+    'len': 2,
+    'notsafe': 1,
+    'order': 0,
+}
 
 # APP
 UPDATE_BASE = True
+PICK_ON_START = True
 SESSIONS_HTML = 'sessions.html'
+
 
 def set_up():
     dir_ = os.path.dirname(os.path.relpath(__file__))

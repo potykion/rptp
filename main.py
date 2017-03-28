@@ -4,6 +4,7 @@ import sys
 from pynput import keyboard
 
 import rptp
+from rptp.config import PICK_ON_START
 from rptp.data.texts import WELCOME_TEXT, COMMANDS
 
 logging.getLogger().setLevel(logging.INFO)
@@ -11,17 +12,17 @@ logging.getLogger().setLevel(logging.INFO)
 
 def on_press(key):
     global actress
+    # if key == keyboard.Key.esc:
+    #     raise InterruptedError('Bye-bye!')
 
-    if key == keyboard.Key.esc:
-        raise InterruptedError('Bye-bye!')
-
-    elif key == keyboard.Key.enter:
+    if key == keyboard.Key.enter:
         actress = manager.random_pick()
         print(actress)
+        browser.request_videos(actress.name)
 
-        successfully = browser.search_videos(actress.name)
-        if not successfully:
-            raise InterruptedError('Ooops! Browser was closed!')
+        if not browser.is_alive():
+            raise InterruptedError('Oops, browser was closed!')
+
     elif key == keyboard.Key.space:
         actress.priority -= 1
         print('{} - priority lowered'.format(actress))
@@ -33,13 +34,14 @@ if __name__ == '__main__':
 
     print('Loading actresses...')
     with rptp.ActressManager() as manager:
-        actress = manager.random_pick()
-        print('Randomly picked actress - {}'.format(actress))
-
         print('Loading browser...')
         with rptp.Browser() as browser:
-            browser.search_videos(actress.name)
             print(COMMANDS)
+
+            if PICK_ON_START:
+                actress = manager.random_pick()
+                print('Randomly picked actress - {}'.format(actress))
+                browser.request_videos(actress.name)
 
             with keyboard.Listener(on_press=on_press) as listener:
                 try:

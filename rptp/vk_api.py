@@ -1,4 +1,5 @@
 import time
+from functools import wraps
 
 import vk
 
@@ -23,10 +24,37 @@ def request_token():
     return session.access_token
 
 
-def find_videos(video_ids):
-    if not api:
-        create_api()
+def init_api(func):
+    @wraps(func)
+    def init_api_wrapper(*args, **kwargs):
+        if not api:
+            create_api()
+        return func(*args, **kwargs)
 
-    videos = api.video.get(videos=','.join(video_ids), v=API_VERSION)['items']
+    return init_api_wrapper
+
+
+@init_api
+def request_video_info(*video_urls):
+    video_ids = [video_url.strip('video') for video_url in video_urls]
+
+    videos = api.video.get(videos=','.join(video_ids), v=API_VERSION, extended=1)['items']
     time.sleep(0.5)
+    return videos
+
+
+@init_api
+def find_videos(query, offset=0, count=20):
+    params = {
+        'q': query,
+        'sort': 0,
+        'hd': 1,
+        'adult': 1,
+        'filters': 'mp4, long',
+        'offset': offset,
+        'count': count,
+        'v': 5.63
+    }
+
+    videos = api.video.search(**params)
     return videos

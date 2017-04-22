@@ -4,7 +4,7 @@ from dateutil import parser
 from jinja2 import Template
 
 from .config import SESSIONS_HTML
-from .vk_api import find_videos
+from .vk_api import request_video_info
 
 
 def form_sessions_report(sessions):
@@ -35,7 +35,7 @@ def format_sessions(sessions):
 
 
 def request_video_info(video_urls):
-    videos = find_videos([video.strip('video') for video in video_urls])
+    videos = request_video_info(*video_urls)
 
     video_info = []
 

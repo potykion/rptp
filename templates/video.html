@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RPTP</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css"
+          integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/octicons/4.4.0/font/octicons.min.css"
+          integrity="sha256-pNGG0948CVwfHxxS8lVkUKftaSsMBzFSUknrKr2utfY=" crossorigin="anonymous"/>
+
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+            integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+            integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"
+            integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
+            crossorigin="anonymous"></script>
+
+    <script>
+        $('document').ready(function () {
+            $('#query-input').change(function () {
+                $('#search-button').val(0);
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="container-fluid mt-4">
+    <div class="card ">
+        <div class="card-block">
+            <h4 class="card-title">Welcome to RPTP-2!</h4>
+
+            <form method="get">
+                <div class="input-group input-group-lg">
+                    <input id="query-input" type="text" class="form-control" placeholder="Search for..."
+                           value="{{ query }}" name="query">
+                    <span class="input-group-btn">
+                    <button name="refresh" value="1" class="btn btn-secondary" type="submit">
+                        <span class="octicon octicon-sync"></span>
+                    </button>
+                </span>
+                    <span class="input-group-btn">
+                    <button id="search-button" name="search" value="{{ offset + DEFAULT_OFFSET }}"
+                            class="btn btn-secondary"
+                            type="submit">
+                        <span class="octicon octicon-search"></span>
+                    </button>
+                </span>
+                </div>
+            </form>
+
+            {#            <p class="card-text mt-2">#}
+            {#                Search results: found {{ count }} / shown {{ videos | length }} / offset {{ offset }}#}
+            {#            </p>#}
+
+            <div class="card-columns mt-3">
+                {% for video in videos %}
+                    <div class="card">
+                        <a href="https://vk.com/video{{ video.owner_id }}_{{ video.id }}">
+                            <img style="width: 100%" class="card-img-top" src="{{ video.photo_320 }}">
+                        </a>
+                        <div class="card-block">
+                            <p class="card-text">{{ video.title }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

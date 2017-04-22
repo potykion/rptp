@@ -1,3 +1,4 @@
+flask
 jinja2
 python-dateutil
 beautifulsoup4==4.5.3

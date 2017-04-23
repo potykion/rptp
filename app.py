@@ -13,6 +13,12 @@ def generate_actress():
     return 'Ukraine'
 
 
+@app.before_first_request
+def setup_logging():
+    app.logger.addHandler(logging.StreamHandler())
+    app.logger.setLevel(logging.INFO)
+
+
 @app.route("/")
 def hello():
     if request.args.get('refresh'):
@@ -25,7 +31,7 @@ def hello():
     try:
         count_, videos = find_videos(query, offset=offset).values()
     except Exception as e:
-        logging.info(e)
+        app.logger.info(e)
         videos = []
     else:
         if not videos:

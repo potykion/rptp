@@ -49,7 +49,7 @@ def find_videos(query, offset=0, count=20):
         'q': query,
         'sort': 0,
         'hd': 1,
-        'adult': 1,
+        # 'adult': 1,
         'filters': 'mp4, long',
         'offset': offset,
         'count': count,

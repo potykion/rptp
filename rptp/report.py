@@ -26,7 +26,7 @@ def form_sessions_report(sessions):
 
 def format_sessions(sessions):
     date_sessions = {
-        parser.parse(date_).date(): request_video_info(videos)
+        parser.parse(date_).date(): map(format_video, request_video_info(*videos))
         for date_, videos in sessions.items()
     }
 
@@ -34,21 +34,9 @@ def format_sessions(sessions):
     return date_sessions
 
 
-def request_video_info(video_urls):
-    videos = request_video_info(*video_urls)
-
-    video_info = []
-
-    for video_url in video_urls:
-        video_dict = next(
-            (video for video in videos if 'video{owner_id}_{id}'.format(**video) == video_url), None
-        )
-
-        if video_dict:
-            video_info.append({
-                'url': 'https://vk.com/{}'.format(video_url),
-                'preview': video_dict.get('photo_320'),
-                'title': video_dict.get('title')
-            })
-
-    return video_info
+def format_video(video):
+    return {
+        'url': 'https://vk.com/video{owner_id}_{id}'.format(**video),
+        'preview': video.get('photo_320'),
+        'title': video.get('title')
+    }

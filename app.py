@@ -1,5 +1,8 @@
 import logging
+import os
+
 from flask import Flask, request, redirect, url_for, render_template
+from flask.ext.sqlalchemy import SQLAlchemy
 
 from rptp.vk_api import find_videos
 
@@ -7,6 +10,8 @@ DEFAULT_QUERY = 'Jessie Rogers'
 DEFAULT_OFFSET = 20
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+db = SQLAlchemy(app)
 
 
 def generate_actress():

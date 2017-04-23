@@ -1,6 +1,6 @@
 import os
 
-from rptp.data.texts import CANT_FIND_LOGIN_STRING
+from rptp.desktop.data.texts import CANT_FIND_LOGIN_STRING
 from rptp.utils.string_utils import split_strip
 
 # DATA

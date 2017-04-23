@@ -4,7 +4,8 @@ from itertools import chain, groupby
 from threading import Thread
 
 from rptp.config import ACTRESS_BASE_PATH, UPDATE_BASE
-from rptp.data.urls import ACTRESS_BASE_PAGE
+from rptp.desktop.data.urls import ACTRESS_BASE_PAGE
+
 from rptp.models.priority import PriorityModel
 from rptp.utils.file_utils import load_json_list, save_as_json
 from rptp.utils.web_utils import url_to_soup

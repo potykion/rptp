@@ -5,10 +5,10 @@ from urllib.parse import urlencode, quote
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 
-from rptp.decorators import retry_if_http_error
-from rptp.watcher import VideoWatcher
 from rptp.config import LOGIN, PASSWORD, DEFAULT_SEARCH_PARAMS
-from rptp.data.urls import VK_BASE_URL, VK_VIDEO_URL
+from rptp.decorators import retry_if_http_error
+from rptp.desktop.data.urls import VK_VIDEO_URL, VK_BASE_URL
+from rptp.watcher import VideoWatcher
 
 
 class Browser(Thread):

@@ -7,8 +7,8 @@ from itertools import chain
 from threading import Thread
 from urllib.parse import urlparse, parse_qs
 
+from rptp.desktop.data.urls import VK_VIDEO_URL
 from .config import SESSION_BASE_PATH
-from .data.urls import VK_VIDEO_URL
 from .utils.file_utils import update_json_dict
 
 

@@ -1,17 +1,19 @@
 # RPTP
 
-CLI app for picking random pornstar and search video with it via VK.
+App for watching VK videos with random pornstar.
 
-# Features
+## Features:
 
-- Random actress pick
-- VK video in Chrome
-- Actress priority lowering
-- HTML reports with watched videos
+- Desktop:
 
-# Requirements
+    - Generate random pornstart
+    - VK video search with Selenium
+    - Watched videos saving and further report generation 
 
-- [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/)
-- pip install -r requirements.txt
+- Web [[Work in progress]](https://rptp.herokuapp.com)
 
+## Run instructions:
 
+- install Python 3.6 + Selenium
+- pip install -r requirements/desktop.txt
+- python desktop_app.py

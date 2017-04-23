@@ -1,3 +1,4 @@
+import logging
 from flask import Flask, request, redirect, url_for, render_template
 
 from rptp.vk_api import find_videos
@@ -21,14 +22,18 @@ def hello():
 
     offset = request.args.get('search', 0, type=int)
 
-    count_, videos = find_videos(query, offset=offset).values()
-
-    if not videos:
-        return redirect(url_for('hello', refresh=1))
+    try:
+        count_, videos = find_videos(query, offset=offset).values()
+    except Exception as e:
+        logging.info(e)
+        videos = []
+    else:
+        if not videos:
+            return redirect(url_for('hello', refresh=1))
 
     context = {
         'query': query,
-        'count': count_,
+        # 'count': count_,
         'videos': videos,
         'offset': offset,
         'DEFAULT_OFFSET': DEFAULT_OFFSET

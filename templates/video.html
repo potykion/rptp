@@ -22,21 +22,21 @@
 
     <script>
         $('document').ready(function () {
-            $('#query-input').change(function () {
-                $('#search-button').val(0);
+            $('.query-input').change(function () {
+                $('.search-button').val(0);
             });
         });
     </script>
 </head>
 <body>
 <div class="container-fluid mt-4">
-    <div class="card ">
+    <div class="card">
         <div class="card-block">
             <h4 class="card-title">Welcome to RPTP-2!</h4>
 
             <form method="get">
                 <div class="input-group input-group-lg">
-                    <input id="query-input" type="text" class="form-control" placeholder="Search for..."
+                    <input type="text" class="query-input form-control" placeholder="Search for..."
                            value="{{ query }}" name="query">
                     <span class="input-group-btn">
                     <button name="refresh" value="1" class="btn btn-secondary" type="submit">
@@ -44,8 +44,8 @@
                     </button>
                 </span>
                     <span class="input-group-btn">
-                    <button id="search-button" name="search" value="{{ offset + DEFAULT_OFFSET }}"
-                            class="btn btn-secondary"
+                    <button name="search" value="{{ offset + DEFAULT_OFFSET }}"
+                            class="search-button btn btn-secondary"
                             type="submit">
                         <span class="octicon octicon-search"></span>
                     </button>
@@ -59,7 +59,7 @@
 
             <div class="card-columns mt-3">
                 {% for video in videos %}
-                    <div class="card">
+                    <div class="card text-left">
                         <a href="https://vk.com/video{{ video.owner_id }}_{{ video.id }}">
                             <img style="width: 100%" class="card-img-top" src="{{ video.photo_320 }}">
                         </a>
@@ -69,6 +69,26 @@
                     </div>
                 {% endfor %}
             </div>
+
+           <form method="get">
+                <div class="input-group input-group-lg">
+                    <input type="text" class="query-input form-control" placeholder="Search for..."
+                           value="{{ query }}" name="query">
+                    <span class="input-group-btn">
+                    <button name="refresh" value="1" class="btn btn-secondary" type="submit">
+                        <span class="octicon octicon-sync"></span>
+                    </button>
+                </span>
+                    <span class="input-group-btn">
+                    <button name="search" value="{{ offset + DEFAULT_OFFSET }}"
+                            class="search-button btn btn-secondary"
+                            type="submit">
+                        <span class="octicon octicon-search"></span>
+                    </button>
+                </span>
+                </div>
+            </form>
+
         </div>
     </div>
 </div>

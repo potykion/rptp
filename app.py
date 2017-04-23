@@ -1,5 +1,4 @@
-from flask import Flask, request, redirect, url_for
-from jinja2 import Template
+from flask import Flask, request, redirect, url_for, render_template
 
 from rptp.vk_api import find_videos
 
@@ -35,11 +34,7 @@ def hello():
         'DEFAULT_OFFSET': DEFAULT_OFFSET
     }
 
-    with open('templates/video.html') as f:
-        template = Template(f.read())
-
-    html = template.render(**context)
-    return html
+    return render_template('video.html', **context)
 
 
 if __name__ == "__main__":

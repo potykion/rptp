@@ -1,27 +1,31 @@
+import os
 import time
 from functools import wraps
 
 import vk
 
-from rptp.config import TOKEN, SCOPE, APP_ID, PASSWORD, LOGIN, API_VERSION
+# from rptp.config import TOKEN, SCOPE, APP_ID, PASSWORD, LOGIN, API_VERSION
+
+API_VERSION = 5.63
 
 api = None
 
 
 def create_api():
     global api
-    session = vk.Session(TOKEN)
+
+    session = vk.Session(os.environ['TOKEN'])
     api = vk.API(session)
 
 
-def request_token():
-    session = vk.AuthSession(
-        user_login=LOGIN,
-        user_password=PASSWORD,
-        app_id=APP_ID,
-        scope=SCOPE,
-    )
-    return session.access_token
+# def request_token():
+#     session = vk.AuthSession(
+#         user_login=LOGIN,
+#         user_password=PASSWORD,
+#         app_id=APP_ID,
+#         scope=SCOPE,
+#     )
+#     return session.access_token
 
 
 def init_api(func):
@@ -53,7 +57,7 @@ def find_videos(query, offset=0, count=20):
         'filters': 'mp4, long',
         'offset': offset,
         'count': count,
-        'v': 5.63
+        'v': API_VERSION
     }
 
     videos = api.video.search(**params)

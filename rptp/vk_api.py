@@ -73,6 +73,7 @@ def find_videos(query, offset=0, count=20, token=None):
     result = requests.get(video_search_url, params).json()
 
     if 'response' in result:
+        result = result['response']
         return result['items'], result['count']
 
     raise LookupError('Video search failed, request result: {}'.format(result))

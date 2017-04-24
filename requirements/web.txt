@@ -12,5 +12,6 @@ pyparsing==2.2.0
 requests==2.13.0
 six==1.10.0
 SQLAlchemy==1.1.9
-vk==2.0.2
 Werkzeug==0.12.1
+bs4
+lxml

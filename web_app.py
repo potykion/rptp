@@ -39,6 +39,7 @@ def hello():
         code = request.args.get('code')
 
         if code:
+            session['code'] = code
             token_link = generate_token_receive_link(code)
             result = requests.get(token_link).json()
             app.logger.info(result)
@@ -60,11 +61,8 @@ def hello():
         offset = request.args.get('search', 0, type=int)
 
         try:
-            result, redirect_url = find_videos(query, offset=offset, token=token)
-            if redirect_url:
-                return redirect(redirect_url)
-            else:
-                videos = result['items']
+            result = find_videos(query, offset=offset, token=token)
+            videos = result['items']
         except Exception as e:
             app.logger.info(type(e))
             app.logger.info(e)

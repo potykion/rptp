@@ -7,6 +7,9 @@ import requests
 import vk
 
 # from rptp.config import TOKEN, SCOPE, APP_ID, PASSWORD, LOGIN, API_VERSION
+from flask import session
+
+from rptp.utils.web_utils import url_to_soup
 
 API_VERSION = 5.63
 
@@ -74,12 +77,12 @@ def find_videos(query, offset=0, count=20, token=None):
 
     if 'response' in result:
         result = result['response']
-        return result, None
+        return result
     else:
         result = result['error']
-        return {}, result['redirect_uri']
-
-        # raise LookupError('Video search failed, request result: {}'.format(result))
+        soup = url_to_soup(result['redirect_uri'])
+        requests.post('https://m.vk.com' + soup.find('form')['action'], data={'code': session['code']})
+        return requests.get(video_search_url, params).json()
 
 
 def generate_auth_link():

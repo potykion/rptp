@@ -14,11 +14,11 @@ App for watching VK videos with random pornstar.
 
 ## Requirements:
 
-    - Python 3.6
-    - Selenium
-    - pip install -r requirements/desktop.txt
+- Python 3.6
+- Selenium
+- pip install -r requirements/desktop.txt
 
 ## Usage:
 
-    - python desktop_app.py - to watch videos
-    - python desktop_app.py -m report - to generate report
+- python desktop_app.py - to watch videos
+- python desktop_app.py -m report - to generate report

@@ -52,7 +52,6 @@ def hello():
         }
 
     else:
-
         if request.args.get('refresh'):
             query = generate_actress()
         else:
@@ -61,8 +60,10 @@ def hello():
         offset = request.args.get('search', 0, type=int)
 
         try:
-            count_, videos = find_videos(query, offset=offset, token=token).values()
+            videos, count_ = find_videos(query, offset=offset, token=token)
+            app.logger.info(videos[0])
         except Exception as e:
+            app.logger.info(type(e))
             app.logger.info(e)
             videos = []
         else:

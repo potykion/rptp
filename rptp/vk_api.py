@@ -63,16 +63,16 @@ def find_videos(query, offset=0, count=20, token=None):
         'filters': 'mp4, long',
         'offset': offset,
         'count': count,
-        'v': API_VERSION,
+        'v': 5.63,
         'access_token': token
     }
 
     base_url = 'https://api.vk.com/method/'
     video_search_url = '{}{}'.format(base_url, 'video.search')
 
-    videos = requests.get(video_search_url, params).json()['response']
+    result = requests.get(video_search_url, params).json()['response']
 
-    return videos
+    return result['items'], result['count']
 
 
 def generate_auth_link():

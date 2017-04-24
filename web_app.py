@@ -60,10 +60,9 @@ def hello():
         offset = request.args.get('search', 0, type=int)
 
         try:
-            result, error = find_videos(query, offset=offset, token=token)
-            if error:
-                app.logger.info(error)
-                raise PermissionError('Succ')
+            result, redirect_url = find_videos(query, offset=offset, token=token)
+            if redirect_url:
+                return redirect(redirect_url)
             else:
                 videos = result['items']
         except Exception as e:

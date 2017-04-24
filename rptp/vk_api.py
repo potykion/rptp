@@ -77,10 +77,9 @@ def find_videos(query, offset=0, count=20, token=None):
         return result, None
     else:
         result = result['error']
-        result = requests.get(result['redirect_uri']).text
-        return {}, result
+        return {}, result['redirect_uri']
 
-    raise LookupError('Video search failed, request result: {}'.format(result))
+        # raise LookupError('Video search failed, request result: {}'.format(result))
 
 
 def generate_auth_link():

@@ -1,6 +1,7 @@
 import os
 import time
 from functools import wraps
+from urllib.parse import urlencode
 
 import vk
 
@@ -67,3 +68,34 @@ def find_videos(query, offset=0, count=20):
 
     videos = api.video.search(**params)
     return videos
+
+
+def generate_auth_link():
+    base_url = 'https://oauth.vk.com/authorize'
+
+    auth_params = {
+        'client_id': '4865149',
+        'redirect_uri': 'https://rptp.herokuapp.com',
+        'score': 'video',
+        'v': 5.63,
+        'response_type': 'code'
+    }
+
+    auth_url = '{}?{}'.format(base_url, urlencode(auth_params))
+
+    return auth_url
+
+
+def generate_token_receive_link(code):
+    base_url = 'https://oauth.vk.com/access_token'
+
+    token_params = {
+        'client_id': '4865149',
+        'redirect_uri': 'https://rptp.herokuapp.com',
+        'client_secret': os.environ['CLIENT_SECRET'],
+        'code': code
+    }
+
+    token_url = '{}?{}'.format(base_url, urlencode(token_params))
+
+    return token_url

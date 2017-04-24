@@ -12,10 +12,11 @@ DEFAULT_OFFSET = 20
 
 app = Flask(__name__)
 
-try:
+if 'IS_HEROKU' in os.environ:
+    app.secret_key = os.environ['SECRET_KEY']
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
     db = SQLAlchemy(app)
-except KeyError:
+else:
     # local dev
     pass
 

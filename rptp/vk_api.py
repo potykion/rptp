@@ -77,12 +77,13 @@ def find_videos(query, offset=0, count=20, token=None):
 
     if 'response' in result:
         result = result['response']
-        return result
+        return result, None
     else:
         result = result['error']
         soup = url_to_soup(result['redirect_uri'])
-        requests.post('https://m.vk.com' + soup.find('form')['action'], data={'code': session['code']})
-        return requests.get(video_search_url, params).json()
+        result = requests.post('https://m.vk.com' + soup.find('form')['action'], data={'code': session['code']}).text
+
+        return requests.get(video_search_url, params).json(), result
 
 
 def generate_auth_link():

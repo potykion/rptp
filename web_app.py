@@ -61,7 +61,9 @@ def hello():
         offset = request.args.get('search', 0, type=int)
 
         try:
-            result = find_videos(query, offset=offset, token=token)
+            result, error = find_videos(query, offset=offset, token=token)
+            app.logger.info(result)
+            app.logger.info(error)
             videos = result['items']
         except Exception as e:
             app.logger.info(type(e))

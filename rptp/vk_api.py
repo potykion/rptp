@@ -74,7 +74,11 @@ def find_videos(query, offset=0, count=20, token=None):
 
     if 'response' in result:
         result = result['response']
-        return result['items'], result['count']
+        return result, None
+    else:
+        result = result['error']
+        result = requests.get(result['redirect_uri']).json()
+        return {}, result
 
     raise LookupError('Video search failed, request result: {}'.format(result))
 

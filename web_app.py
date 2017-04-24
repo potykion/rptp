@@ -60,11 +60,16 @@ def hello():
         offset = request.args.get('search', 0, type=int)
 
         try:
-            videos, count_ = find_videos(query, offset=offset, token=token)
-            app.logger.info(videos[0])
+            result, error = find_videos(query, offset=offset, token=token)
+            if error:
+                app.logger.info(error)
+                raise PermissionError('Succ')
+            else:
+                videos = result['items']
         except Exception as e:
             app.logger.info(type(e))
             app.logger.info(e)
+
             videos = []
         else:
             if not videos:

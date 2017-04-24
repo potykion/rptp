@@ -42,9 +42,9 @@ def hello():
         if code:
             token_link = generate_token_receive_link(code)
             result = requests.get(token_link).json()
-            logging.info(result)
+            app.logger.info(result)
             session.update(result)
-            return redirect('home')
+            return redirect(url_for('home'))
 
         auth_link = generate_auth_link()
 

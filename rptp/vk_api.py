@@ -14,7 +14,12 @@ api = None
 def create_api():
     global api
 
-    session = vk.Session(os.environ['TOKEN'])
+    if 'IS_HEROKU' in os.environ:
+        TOKEN = os.environ['TOKEN']
+    else:
+        from .config import TOKEN
+
+    session = vk.Session(TOKEN)
     api = vk.API(session)
 
 

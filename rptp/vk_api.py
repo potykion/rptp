@@ -87,7 +87,8 @@ def generate_auth_link():
         'redirect_uri': 'https://rptp.herokuapp.com',
         'score': 'video',
         'v': 5.63,
-        'response_type': 'code'
+        'response_type': 'code',
+        'display': 'popup'
     }
 
     auth_url = '{}?{}'.format(base_url, urlencode(auth_params))

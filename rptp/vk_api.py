@@ -81,7 +81,7 @@ def find_videos(query, offset=0, count=20, token=None):
     else:
         result = result['error']
         soup = url_to_soup(result['redirect_uri'])
-        result = requests.post('https://m.vk.com' + soup.find('form')['action'], data={'code': session['code']}).text
+        result = requests.post('https://m.vk.com' + soup.find('form')['action'], data={'code': '9150636817'}).text
 
         return requests.get(video_search_url, params).json(), result
 

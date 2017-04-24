@@ -39,7 +39,6 @@ def hello():
         code = request.args.get('code')
 
         if code:
-            session['code'] = code
             token_link = generate_token_receive_link(code)
             result = requests.get(token_link).json()
             app.logger.info(result)

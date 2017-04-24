@@ -3,6 +3,7 @@ import time
 from functools import wraps
 from urllib.parse import urlencode
 
+import requests
 import vk
 
 # from rptp.config import TOKEN, SCOPE, APP_ID, PASSWORD, LOGIN, API_VERSION
@@ -54,8 +55,6 @@ def request_video_info(*video_urls):
 
 
 def find_videos(query, offset=0, count=20, token=None):
-    global api
-
     params = {
         'q': query,
         'sort': 0,
@@ -64,14 +63,15 @@ def find_videos(query, offset=0, count=20, token=None):
         'filters': 'mp4, long',
         'offset': offset,
         'count': count,
-        'v': API_VERSION
+        'v': API_VERSION,
+        'access_token': token
     }
 
-    if not api:
-        session = vk.Session(token)
-        api = vk.API(session)
+    base_url = 'https://api.vk.com/method/'
+    video_search_url = '{}{}'.format(base_url, 'video.search')
 
-    videos = api.video.search(**params)
+    videos = requests.get(video_search_url, params).json()['response']
+
     return videos
 
 

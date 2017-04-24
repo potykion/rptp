@@ -34,7 +34,6 @@ def generate_actress():
 @app.route("/")
 def hello():
     token = session.get('access_token')
-    # token = 'op'
 
     if not token:
         code = request.args.get('code')
@@ -44,7 +43,7 @@ def hello():
             result = requests.get(token_link).json()
             app.logger.info(result)
             session.update(result)
-            return redirect(url_for('home'))
+            return redirect(url_for('hello'))
 
         auth_link = generate_auth_link()
 
@@ -61,15 +60,14 @@ def hello():
 
         offset = request.args.get('search', 0, type=int)
 
-        videos = []
-        # try:
-        #     count_, videos = find_videos(query, offset=offset).values()
-        # except Exception as e:
-        #     app.logger.info(e)
-        #     videos = []
-        # else:
-        #     if not videos:
-        #         return redirect(url_for('hello', refresh=1))
+        try:
+            count_, videos = find_videos(query, offset=offset, token=token).values()
+        except Exception as e:
+            app.logger.info(e)
+            videos = []
+        else:
+            if not videos:
+                return redirect(url_for('hello', refresh=1))
 
         context = {
             'token': token,

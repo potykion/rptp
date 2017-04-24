@@ -53,18 +53,23 @@ def request_video_info(*video_urls):
     return videos
 
 
-@init_api
-def find_videos(query, offset=0, count=20):
+def find_videos(query, offset=0, count=20, token=None):
+    global api
+
     params = {
         'q': query,
         'sort': 0,
         'hd': 1,
-        # 'adult': 1,
+        'adult': 1,
         'filters': 'mp4, long',
         'offset': offset,
         'count': count,
         'v': API_VERSION
     }
+
+    if not api:
+        session = vk.Session(token)
+        api = vk.API(session)
 
     videos = api.video.search(**params)
     return videos

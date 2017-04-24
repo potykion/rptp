@@ -88,7 +88,7 @@ def generate_auth_link():
         'score': 'video',
         'v': 5.63,
         'response_type': 'code',
-        'display': 'popup'
+        'display': 'page'
     }
 
     auth_url = '{}?{}'.format(base_url, urlencode(auth_params))

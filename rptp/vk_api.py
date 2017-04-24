@@ -70,9 +70,12 @@ def find_videos(query, offset=0, count=20, token=None):
     base_url = 'https://api.vk.com/method/'
     video_search_url = '{}{}'.format(base_url, 'video.search')
 
-    result = requests.get(video_search_url, params).json()['response']
+    result = requests.get(video_search_url, params).json()
 
-    return result['items'], result['count']
+    if 'response' in result:
+        return result['items'], result['count']
+
+    raise LookupError('Video search failed, request result: {}'.format(result))
 
 
 def generate_auth_link():

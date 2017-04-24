@@ -7,6 +7,7 @@ import requests
 import vk
 
 # from rptp.config import TOKEN, SCOPE, APP_ID, PASSWORD, LOGIN, API_VERSION
+from bs4 import BeautifulSoup
 from flask import session
 
 from rptp.utils.web_utils import url_to_soup
@@ -75,12 +76,19 @@ def find_videos(query, offset=0, count=20, token=None):
 
     result = requests.get(video_search_url, params).json()
 
+    from web_app import app
+    app.logger.info(result)
+
     if 'response' in result:
         result = result['response']
         return result, None
     else:
         result = result['error']
-        soup = url_to_soup(result['redirect_uri'])
+        result = requests.get(result['redirect_uri']).text
+
+        app.logger.info(result)
+        soup = BeautifulSoup(result)
+
         result = requests.post('https://m.vk.com' + soup.find('form')['action'], data={'code': '9150636817'}).text
 
         return requests.get(video_search_url, params).json(), result

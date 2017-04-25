@@ -89,7 +89,7 @@ def find_videos(query, offset=0, count=20, token=None):
         app.logger.info(result)
         soup = BeautifulSoup(result)
 
-        result = requests.post('https://m.vk.com' + soup.find('form')['action'], data={'code': '9150636817'}).text
+        result = requests.post('https://m.vk.com' + soup.find('form')['action'], data={'code': '91506368'}).text
 
         return requests.get(video_search_url, params).json(), result
 

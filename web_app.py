@@ -5,11 +5,13 @@ import requests
 from flask import Flask, request, redirect, url_for, render_template, session
 from flask_sqlalchemy import SQLAlchemy
 
-from rptp.vk_api import find_videos, generate_auth_link, generate_token_receive_link
-
-DEFAULT_OFFSET = 20
+from rptp.common.utils import format_seconds, truncate_left, truncate_right
+from rptp.vk_api import find_videos, generate_auth_link, generate_token_receive_link, DEFAULT_OFFSET
 
 app = Flask(__name__)
+app.jinja_env.filters['format_seconds'] = format_seconds
+app.jinja_env.filters['truncate_left'] = truncate_left
+app.jinja_env.filters['truncate_right'] = truncate_right
 
 if 'IS_HEROKU' in os.environ:
     app.secret_key = os.environ['SECRET_KEY']
@@ -65,11 +67,10 @@ def hello():
         offset = request.args.get('search', 0, type=int)
 
         try:
-            result = find_videos(query, offset=offset, token=token)
-            videos = result['items']
+            videos, count_ = find_videos(query, offset=offset, token=token)
         except LookupError as e:
             app.logger.info(e)
-            videos = []
+            videos, count_ = [], 0
         else:
             if not videos:
                 return redirect(url_for('hello', refresh=1))
@@ -78,6 +79,7 @@ def hello():
             'token': token,
             'query': query,
             'videos': videos,
+            'count': count_,
             'offset': offset,
             'DEFAULT_OFFSET': DEFAULT_OFFSET
         }

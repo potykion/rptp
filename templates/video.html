@@ -6,13 +6,23 @@
             $('.query-input').change(function () {
                 $('.search-button').val(0);
             });
+
+            $('.up-button').click(function () {
+                window.scrollTo(0, 0);
+            });
+
+            $('.truncated').hide()
+                .after(' <i class="fa fa-ellipsis-h" aria-hidden="true"></i>')
+                .next().on('click', function () {
+                $(this).prev().toggle();
+            });
         });
     </script>
 {% endblock %}
 
 {% block content %}
 
-    <div class="card">
+    <div class="card text-center">
         {% if token %}
             <div class="card-block">
                 <form method="get">
@@ -21,22 +31,28 @@
                                value="{{ query }}" name="query">
                         <span class="input-group-btn">
                     <button name="refresh" value="1" class="btn btn-secondary" type="submit">
-                        <span class="octicon octicon-sync"></span>
+                        <i class="fa fa-refresh" aria-hidden="true"></i>
                     </button>
                 </span>
                         <span class="input-group-btn">
                     <button name="search" value="{{ offset + DEFAULT_OFFSET }}"
                             class="search-button btn btn-secondary"
                             type="submit">
-                        <span class="octicon octicon-search"></span>
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
                     </button>
                 </span>
                     </div>
                 </form>
 
-                {#            <p class="card-text mt-2">#}
-                {#                Search results: found {{ count }} / shown {{ videos | length }} / offset {{ offset }}#}
-                {#            </p>#}
+                <p class="card-text mt-2">
+                    Shown from {{ offset }} to
+                    {% if offset + DEFAULT_OFFSET > count %}
+                        {{ count }}
+                    {% else %}
+                        {{ offset + DEFAULT_OFFSET }}
+                    {% endif %}
+                    out of {{ count }}.
+                </p>
 
                 <div class="card-columns mt-3">
                     {% for video in videos %}
@@ -45,12 +61,29 @@
                                 <img style="width: 100%" class="card-img-top" src="{{ video.photo_320 }}">
                             </a>
                             <div class="card-block">
-                                <p class="card-text">{{ video.title }}</p>
+                                <p class="card-text">
+                                    {{ video.title|truncate_left }}
+                                    {% if video.title|length > 50 %}
+                                        <span class="truncated">{{ video.title|truncate_right }}</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="card-footer">
+                                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                <span class="badge badge-pill badge-default">{{ video.duration|format_seconds }}</span>
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                <span class="badge badge-pill badge-default">{{ video.views }}</span>
+
                             </div>
                         </div>
                     {% endfor %}
                 </div>
 
+            </div>
+            <div class="card-footer">
+                <button type="button" class="up-button btn btn-secondary">
+                    <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                </button>
             </div>
         {% else %}
             <div class="card-block">

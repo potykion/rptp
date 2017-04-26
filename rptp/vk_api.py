@@ -7,12 +7,9 @@ import requests
 import vk
 
 # from rptp.config import TOKEN, SCOPE, APP_ID, PASSWORD, LOGIN, API_VERSION
-from bs4 import BeautifulSoup
-from flask import session
-
-from rptp.utils.web_utils import url_to_soup
 
 API_VERSION = 5.63
+DEFAULT_OFFSET = 40
 
 api = None
 
@@ -58,7 +55,7 @@ def request_video_info(*video_urls):
     return videos
 
 
-def find_videos(query, offset=0, count=20, token=None):
+def find_videos(query, offset=0, count=DEFAULT_OFFSET, token=None):
     params = {
         'q': query,
         'sort': 0,
@@ -74,6 +71,10 @@ def find_videos(query, offset=0, count=20, token=None):
         params.update({
             'adult': 1,
         })
+    else:
+        params.update({
+            'adult': 1,
+        })
 
     base_url = 'https://api.vk.com/method/'
     video_search_url = '{}{}'.format(base_url, 'video.search')
@@ -81,7 +82,11 @@ def find_videos(query, offset=0, count=20, token=None):
     result = requests.get(video_search_url, params).json()
 
     if 'response' in result:
-        return result['response']
+        videos = result['response']['items']
+        count_ = result['response']['count']
+        if params.get('adult'):
+            videos = list(filter(lambda video: not video['can_add'], videos))
+        return videos, count_
 
     raise LookupError('Failed to search videos: {}'.format(result['error']))
 

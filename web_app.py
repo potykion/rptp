@@ -1,5 +1,7 @@
+import json
 import logging
 import os
+import random
 
 import requests
 from flask import Flask, request, redirect, url_for, render_template, session, jsonify
@@ -27,7 +29,14 @@ def setup_logging():
 
 
 def generate_actress():
-    return 'sample text'
+    actresses = Actress.fetch_as_json()
+
+    if not actresses:
+        with open('data/actresses.json') as f:
+            actresses = json.load(f)
+            list(map(Actress.create_from_json, actresses))
+
+    return random.choice(actresses)['name']
 
 
 @app.route("/")

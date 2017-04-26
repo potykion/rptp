@@ -1,15 +1,12 @@
-import json
 import logging
 import os
-import random
 
 import requests
-from flask import Flask, request, redirect, url_for, render_template, session, jsonify
+from flask import Flask, request, redirect, url_for, render_template, session
 from flask_sqlalchemy import SQLAlchemy
 
 from rptp.vk_api import find_videos, generate_auth_link, generate_token_receive_link
 
-DEFAULT_QUERY = 'Jessie Rogers'
 DEFAULT_OFFSET = 20
 
 app = Flask(__name__)
@@ -63,7 +60,7 @@ def hello():
         if request.args.get('refresh'):
             query = actress_manager.generate_actress()
         else:
-            query = request.args.get('query', DEFAULT_QUERY)
+            query = request.args.get('query', actress_manager.generate_actress())
 
         offset = request.args.get('search', 0, type=int)
 

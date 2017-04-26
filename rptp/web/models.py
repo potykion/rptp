@@ -41,10 +41,12 @@ class Actress(db.Model):
         :return: New actress
         """
 
-        actress = cls(**actress_json)
-        db.session.add(actress)
-        db.session.commit()
-        return actress
+        exists = db.session.query(db.exists().where(Actress.url == actress_json['url'])).scalar()
+        if not exists:
+            actress = cls(**actress_json)
+            db.session.add(actress)
+            db.session.commit()
+            return actress
 
     @classmethod
     def fetch_as_json(cls):

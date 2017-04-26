@@ -29,12 +29,12 @@ def setup_logging():
 
 
 def generate_actress():
-    actresses = Actress.fetch_as_json()
+    # actresses = Actress.fetch_as_json()
 
-    if not actresses:
-        with open('data/actresses.json') as f:
-            actresses = json.load(f)
-            list(map(Actress.create_from_json, actresses))
+
+    with open('data/actresses.json') as f:
+        actresses = json.load(f)
+        list(map(Actress.create_from_json, actresses))
 
     return random.choice(actresses)['name']
 

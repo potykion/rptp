@@ -7,10 +7,13 @@ App for watching VK videos with random pornstar.
 - Desktop:
 
     - Generate random pornstart
-    - VK video search with Selenium
+    - VK video search via Selenium
     - Watched videos saving and further report generation 
 
-- Web [[Work in progress]](https://rptp.herokuapp.com)
+- [Web](https://rptp.herokuapp.com)
+
+    - Generate random pornstart
+    - VK video search via API
 
 ## Requirements:
 

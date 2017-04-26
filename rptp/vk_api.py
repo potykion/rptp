@@ -28,6 +28,7 @@ def create_api():
     session = vk.Session(TOKEN)
     api = vk.API(session)
 
+
 # def request_token():
 #     session = vk.AuthSession(
 #         user_login=LOGIN,
@@ -62,13 +63,17 @@ def find_videos(query, offset=0, count=20, token=None):
         'q': query,
         'sort': 0,
         'hd': 1,
-        'adult': 1,
         'filters': 'mp4, long',
         'offset': offset,
         'count': count,
         'v': 5.63,
         'access_token': token
     }
+
+    if 'IS_HEROKU' in os.environ:
+        params.update({
+            'adult': 1,
+        })
 
     base_url = 'https://api.vk.com/method/'
     video_search_url = '{}{}'.format(base_url, 'video.search')

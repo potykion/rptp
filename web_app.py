@@ -19,7 +19,11 @@ if 'IS_HEROKU' in os.environ:
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
     db = SQLAlchemy(app)
 
-    from rptp.web.models import *
+    from rptp.prod.models import ActressManager
+else:
+    from rptp.local.models import ActressManager
+
+actress_manager = ActressManager()
 
 
 @app.before_first_request
@@ -28,14 +32,17 @@ def setup_logging():
     app.logger.setLevel(logging.INFO)
 
 
-def generate_actress():
-    actresses = Actress.fetch_as_json()
-    return random.choice(actresses)['name']
+def access_token():
+    if 'IS_HEROKU' in os.environ:
+        return session.get('access_token')
+    else:
+        from rptp.config import TOKEN
+        return TOKEN
 
 
 @app.route("/")
 def hello():
-    token = session.get('access_token')
+    token = access_token()
 
     if not token:
         code = request.args.get('code')
@@ -52,10 +59,9 @@ def hello():
         context = {
             'auth_url': auth_link
         }
-
     else:
         if request.args.get('refresh'):
-            query = generate_actress()
+            query = actress_manager.generate_actress()
         else:
             query = request.args.get('query', DEFAULT_QUERY)
 

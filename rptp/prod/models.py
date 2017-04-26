@@ -1,5 +1,4 @@
-from flask import jsonify
-
+from rptp.common.models import ActressProxy
 from web_app import db
 
 
@@ -14,16 +13,6 @@ class Actress(db.Model):
     def __init__(self, **kwargs):
         for field, value in kwargs.items():
             setattr(self, field, value)
-
-    @property
-    def serialize(self):
-        return {
-            "priority": self.priority,
-            "name": self.name,
-            "image": self.image,
-            "debut_year": self.debut_year,
-            "url": self.url
-        }
 
     @classmethod
     def create_from_json(cls, actress_json):
@@ -48,11 +37,16 @@ class Actress(db.Model):
             db.session.commit()
             return actress
 
-    @classmethod
-    def fetch_as_json(cls):
-        """
-        Fetch actresses and jsonify them.
-        :return: List of serialized actresses.
-        """
 
-        return [actress.serialize for actress in cls.query.all()]
+class ActressManager(ActressProxy):
+    def fetch(self):
+        return Actress.query.all()
+
+    def serialize(self, actress):
+        return {
+            "priority": actress.priority,
+            "name": actress.name,
+            "image": actress.image,
+            "debut_year": actress.debut_year,
+            "url": actress.url
+        }

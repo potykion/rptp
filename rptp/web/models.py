@@ -15,6 +15,16 @@ class Actress(db.Model):
         for field, value in kwargs.items():
             setattr(self, field, value)
 
+    @property
+    def serialize(self):
+        return {
+            "priority": self.priority,
+            "name": self.name,
+            "image": self.image,
+            "debut_year": self.debut_year,
+            "url": self.url
+        }
+
     @classmethod
     def create_from_json(cls, actress_json):
         """
@@ -43,4 +53,4 @@ class Actress(db.Model):
         :return: List of serialized actresses.
         """
 
-        return jsonify(actresses=cls.query.all())
+        return [actress.serialize for actress in cls.query.all()]

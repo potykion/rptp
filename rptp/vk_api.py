@@ -28,7 +28,6 @@ def create_api():
     session = vk.Session(TOKEN)
     api = vk.API(session)
 
-
 # def request_token():
 #     session = vk.AuthSession(
 #         user_login=LOGIN,
@@ -76,22 +75,10 @@ def find_videos(query, offset=0, count=20, token=None):
 
     result = requests.get(video_search_url, params).json()
 
-    from web_app import app
-    app.logger.info(result)
-
     if 'response' in result:
-        result = result['response']
-        return result, None
-    else:
-        result = result['error']
-        result = requests.get(result['redirect_uri']).text
+        return result['response']
 
-        app.logger.info(result)
-        soup = BeautifulSoup(result)
-
-        result = requests.post('https://m.vk.com' + soup.find('form')['action'], data={'code': '91506368'}).text
-
-        return requests.get(video_search_url, params).json(), result
+    raise LookupError('Failed to search videos: {}'.format(result['error']))
 
 
 def generate_auth_link():

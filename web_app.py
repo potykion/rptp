@@ -2,7 +2,7 @@ import logging
 import os
 
 import requests
-from flask import Flask, request, redirect, url_for, render_template, session
+from flask import Flask, request, redirect, url_for, render_template, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 from rptp.vk_api import find_videos, generate_auth_link, generate_token_receive_link
@@ -16,9 +16,8 @@ if 'IS_HEROKU' in os.environ:
     app.secret_key = os.environ['SECRET_KEY']
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
     db = SQLAlchemy(app)
-else:
-    # local dev
-    pass
+
+    from rptp.web.models import *
 
 
 @app.before_first_request
@@ -60,14 +59,10 @@ def hello():
         offset = request.args.get('search', 0, type=int)
 
         try:
-            result, error = find_videos(query, offset=offset, token=token)
-            app.logger.info(result)
-            app.logger.info(error)
+            result = find_videos(query, offset=offset, token=token)
             videos = result['items']
-        except Exception as e:
-            app.logger.info(type(e))
+        except LookupError as e:
             app.logger.info(e)
-
             videos = []
         else:
             if not videos:
@@ -76,7 +71,6 @@ def hello():
         context = {
             'token': token,
             'query': query,
-            # 'count': count_,
             'videos': videos,
             'offset': offset,
             'DEFAULT_OFFSET': DEFAULT_OFFSET

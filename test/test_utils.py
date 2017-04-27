@@ -8,6 +8,8 @@ def test_truncate_left():
         'Ariel.temple Milf mature Ass Babes Няшка Русское домашние Порно anal fuck блондиночка сосёт Эротика Секс в попу Молоденькие br') == \
            'Ariel.temple Milf mature Ass Babes Няшка Русское'
 
+    # todo "viv.16.05.11.lena.love.and.violette.pink.sophisticated" => "viv.16.05.11.lena.love.and.violette"
+
 
 def test_truncate_right():
     assert truncate_right(

@@ -26,19 +26,20 @@
         {% if token %}
             <div class="card-block">
                 <form method="get">
-                    <div class="input-group input-group-lg">
+                    <div class="input-group">
                         <input type="text" class="query-input form-control" placeholder="Search for..."
                                value="{{ query }}" name="query">
                         <span class="input-group-btn">
-                    <button name="refresh" value="1" class="btn btn-secondary" type="submit">
-                        <i class="fa fa-refresh" aria-hidden="true"></i>
+                    <button name="refresh" value="1"
+                            class="btn btn-secondary" type="submit">
+                        <i class="fa fa-refresh" aria-hidden="true"></i> Refresh actress
                     </button>
                 </span>
                         <span class="input-group-btn">
                     <button name="search" value="{{ offset + DEFAULT_OFFSET }}"
                             class="search-button btn btn-secondary"
                             type="submit">
-                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                       <i class="fa fa-video-camera" aria-hidden="true"></i> More videos
                     </button>
                 </span>
                     </div>
@@ -81,13 +82,16 @@
 
             </div>
             <div class="card-footer">
-                <button type="button" class="up-button btn btn-secondary">
+                <button type="button" class="up-button btn btn-secondary btn-lg">
                     <i class="fa fa-arrow-up" aria-hidden="true"></i>
                 </button>
             </div>
         {% else %}
             <div class="card-block">
                 <p class="card-text">Please log in to VK.</p>
+                <a href="{{ auth_url }}" class="btn btn-primary btn-lg">
+                    <i class="fa fa-vk" aria-hidden="true"></i>
+                </a>
             </div>
         {% endif %}
     </div>

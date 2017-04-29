@@ -39,7 +39,7 @@
                     <button name="search" value="{{ offset + DEFAULT_OFFSET }}"
                             class="search-button btn btn-secondary"
                             type="submit">
-                       <i class="fa fa-video-camera" aria-hidden="true"></i> More videos
+                       <i class="fa fa-video-camera" aria-hidden="true"></i> Search videos
                     </button>
                 </span>
                     </div>
@@ -82,9 +82,26 @@
 
             </div>
             <div class="card-footer">
-                <button type="button" class="up-button btn btn-secondary btn-lg">
-                    <i class="fa fa-arrow-up" aria-hidden="true"></i>
-                </button>
+                <form method="get">
+                    <div class="btn-group btn-group-lg">
+                        <button type="button" class="up-button btn btn-secondary">
+                            <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                        </button>
+
+
+                        <button name="refresh" value="1"
+                                class="btn btn-secondary" type="submit">
+                            <i class="fa fa-refresh" aria-hidden="true"></i>
+                        </button>
+
+                        <button name="search" value="{{ offset + DEFAULT_OFFSET }}"
+                                class="search-button btn btn-secondary"
+                                type="submit">
+                            <i class="fa fa-video-camera" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </form>
+
             </div>
         {% else %}
             <div class="card-block">

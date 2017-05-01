@@ -88,7 +88,7 @@ def find_videos(query, offset=0, count=DEFAULT_OFFSET, token=None):
             videos = list(filter(lambda video: not video['can_add'], videos))
         return videos, count_
 
-    raise LookupError('Failed to search videos: {}'.format(result['error']))
+    raise LookupError('Failed to search videos', result['error'])
 
 
 def generate_auth_link():
@@ -97,7 +97,7 @@ def generate_auth_link():
     auth_params = {
         'client_id': '4865149',
         'redirect_uri': 'https://rptp.herokuapp.com',
-        'scope': 'video',
+        'scope': 'video, offline',
         'v': 5.63,
         'response_type': 'code',
         'display': 'mobile'

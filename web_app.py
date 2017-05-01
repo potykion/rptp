@@ -70,10 +70,16 @@ def hello():
             videos, count_ = find_videos(query, offset=offset, token=token)
         except LookupError as e:
             app.logger.info(e)
+            message, error = e.args
+
+            if message['error_code'] == 5:
+                session.pop('access_token')
+                return redirect(url_for('hello'))
+
             videos, count_ = [], 0
         else:
             if not videos:
-                return redirect(url_for('hello', refresh=1))
+                return redirect(url_for('hello'))
 
         context = {
             'token': token,

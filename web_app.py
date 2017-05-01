@@ -72,7 +72,7 @@ def hello():
             app.logger.info(e)
             message, error = e.args
 
-            if message['error_code'] == 5:
+            if error['error_code'] == 5:
                 session.pop('access_token')
                 return redirect(url_for('hello'))
 

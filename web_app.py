@@ -1,12 +1,11 @@
 import logging
 import os
 
-import requests
 from flask import Flask, request, redirect, url_for, render_template, session
 from flask_sqlalchemy import SQLAlchemy
 
 from rptp.common.utils import format_seconds, truncate_left, truncate_right
-from rptp.vk_api import find_videos, generate_auth_link, generate_token_receive_link, DEFAULT_OFFSET, \
+from rptp.vk_api import find_videos, generate_auth_link, DEFAULT_OFFSET, \
     receive_token_from_code
 
 app = Flask(__name__)

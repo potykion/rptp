@@ -1,14 +1,21 @@
 from rptp.common.models import ActressProxy
 from web_app import db
 
+"""
+For new models:
+$ heroku run python
+>>> from web_app import db
+>>> db.create_all()
+"""
+
 
 class Actress(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     priority = db.Column(db.Integer, default=0)
-    name = db.Column(db.String(80))
-    image = db.Column(db.String(80))
+    name = db.Column(db.String(100))
+    image = db.Column(db.String(100))
     debut_year = db.Column(db.Integer)
-    url = db.Column(db.String(80))
+    url = db.Column(db.String(100))
 
     def __init__(self, **kwargs):
         for field, value in kwargs.items():
@@ -54,7 +61,7 @@ class ActressManager(ActressProxy):
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    access_token = db.Column(db.String(80))
+    access_token = db.Column(db.String(100))
     user_id = db.Column(db.Integer)
 
     def __init__(self, **kwargs):

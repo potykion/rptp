@@ -6,7 +6,8 @@ from flask import Flask, request, redirect, url_for, render_template, session
 from flask_sqlalchemy import SQLAlchemy
 
 from rptp.common.utils import format_seconds, truncate_left, truncate_right
-from rptp.vk_api import find_videos, generate_auth_link, generate_token_receive_link, DEFAULT_OFFSET
+from rptp.vk_api import find_videos, generate_auth_link, generate_token_receive_link, DEFAULT_OFFSET, \
+    receive_token_from_code
 
 app = Flask(__name__)
 app.jinja_env.filters['format_seconds'] = format_seconds
@@ -15,10 +16,11 @@ app.jinja_env.filters['truncate_right'] = truncate_right
 
 if 'IS_HEROKU' in os.environ:
     app.secret_key = os.environ['SECRET_KEY']
+
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
     db = SQLAlchemy(app)
 
-    from rptp.prod.models import ActressManager
+    from rptp.prod.models import ActressManager, User
 else:
     from rptp.local.models import ActressManager
 
@@ -31,7 +33,7 @@ def setup_logging():
     app.logger.setLevel(logging.INFO)
 
 
-def access_token():
+def request_access_token():
     if 'IS_HEROKU' in os.environ:
         return session.get('access_token')
     else:
@@ -41,16 +43,20 @@ def access_token():
 
 @app.route("/")
 def hello():
-    token = access_token()
+    token = request_access_token()
 
     if not token:
         code = request.args.get('code')
 
         if code:
-            token_link = generate_token_receive_link(code)
-            result = requests.get(token_link).json()
+            result = receive_token_from_code(code)
             app.logger.info(result)
-            session.update(result)
+
+            if 'access_token' in result:
+                session.update(result)
+                user = User.get_or_create(result['user_id'])
+                user.update_token(result['access_token'])
+
             return redirect(url_for('hello'))
 
         auth_link = generate_auth_link()

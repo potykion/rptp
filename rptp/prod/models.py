@@ -50,3 +50,28 @@ class ActressManager(ActressProxy):
             "debut_year": actress.debut_year,
             "url": actress.url
         }
+
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    access_token = db.Column(db.String(80))
+    user_id = db.Column(db.Integer)
+
+    def __init__(self, **kwargs):
+        for field, value in kwargs.items():
+            setattr(self, field, value)
+
+    @classmethod
+    def get_or_create(cls, user_id):
+        user = cls.query.filter_by(user_id=user_id).first()
+
+        if not user:
+            user = cls(user_id=user_id)
+            db.session.add(user)
+            db.session.commit()
+
+        return user
+
+    def update_token(self, token):
+        self.access_token = token
+        db.session.commit()

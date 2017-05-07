@@ -6,8 +6,6 @@ from urllib.parse import urlencode
 import requests
 import vk
 
-# from rptp.config import TOKEN, SCOPE, APP_ID, PASSWORD, LOGIN, API_VERSION
-
 API_VERSION = 5.63
 DEFAULT_OFFSET = 40
 
@@ -24,16 +22,6 @@ def create_api():
 
     session = vk.Session(TOKEN)
     api = vk.API(session)
-
-
-# def request_token():
-#     session = vk.AuthSession(
-#         user_login=LOGIN,
-#         user_password=PASSWORD,
-#         app_id=APP_ID,
-#         scope=SCOPE,
-#     )
-#     return session.access_token
 
 
 def init_api(func):
@@ -121,3 +109,15 @@ def generate_token_receive_link(code):
     token_url = '{}?{}'.format(base_url, urlencode(token_params))
 
     return token_url
+
+
+def receive_token_from_code(code):
+    """
+    Get token from auth code.
+    :param code: Auth code returned after authorization.
+    :return: Token json:
+    {"access_token":"533bacf01e11f55b536a565b57531ac114461ae8736d6506a3", "expires_in":43200, '''user_id":66748} 
+    """
+    token_link = generate_token_receive_link(code)
+    result = requests.get(token_link).json()
+    return result

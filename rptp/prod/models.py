@@ -10,8 +10,6 @@ $ heroku run python
 
 
 class Actress(db.Model):
-    __bind_key__ = 'actresses'
-
     id = db.Column(db.Integer, primary_key=True)
     priority = db.Column(db.Integer, default=0)
     name = db.Column(db.String(100))
@@ -62,7 +60,6 @@ class ActressManager(ActressProxy):
 
 
 class User(db.Model):
-    __bind_key__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     access_token = db.Column(db.String(100))
     user_id = db.Column(db.Integer)

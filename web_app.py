@@ -2,7 +2,6 @@ import logging
 import os
 
 from flask import Flask, request, redirect, url_for, render_template, session
-from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
 from rptp.common.utils import format_seconds, truncate_left, truncate_right
@@ -19,7 +18,6 @@ if 'IS_HEROKU' in os.environ:
 
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
     db = SQLAlchemy(app)
-    migrate = Migrate(app, db)
 
     from rptp.prod.models import ActressManager, User
 else:

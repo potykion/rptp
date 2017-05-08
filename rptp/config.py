@@ -1,6 +1,5 @@
 import os
 
-from rptp.desktop.data.texts import CANT_FIND_LOGIN_STRING
 from rptp.utils.string_utils import split_strip
 
 # DATA
@@ -48,7 +47,7 @@ def _load_login():
         with open(LOGIN_FILE) as f:
             LOGIN, PASSWORD, TOKEN = split_strip(f.read())
     else:
-        login_string = input(CANT_FIND_LOGIN_STRING.format(login_string)).strip(' "')
+        login_string = input("Please enter your VK login and password in such format: 'login, password'").strip(' "')
         LOGIN, PASSWORD = split_strip(login_string)
 
         from rptp.vk_api import request_token

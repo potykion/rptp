@@ -1,46 +1,10 @@
 import os
-import time
-from functools import wraps
 from urllib.parse import urlencode
 
 import requests
-import vk
 
 API_VERSION = 5.63
 DEFAULT_OFFSET = 40
-
-api = None
-
-
-def create_api():
-    global api
-
-    if 'IS_HEROKU' in os.environ:
-        TOKEN = os.environ['TOKEN']
-    else:
-        from .config import TOKEN
-
-    session = vk.Session(TOKEN)
-    api = vk.API(session)
-
-
-def init_api(func):
-    @wraps(func)
-    def init_api_wrapper(*args, **kwargs):
-        if not api:
-            create_api()
-        return func(*args, **kwargs)
-
-    return init_api_wrapper
-
-
-@init_api
-def request_video_info(*video_urls):
-    video_ids = [video_url.strip('video') for video_url in video_urls]
-
-    videos = api.video.get(videos=','.join(video_ids), v=API_VERSION, extended=1)['items']
-    time.sleep(0.5)
-    return videos
 
 
 def find_videos(query, offset=0, count=DEFAULT_OFFSET, token=None):

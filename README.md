@@ -1,27 +1,14 @@
 # RPTP
 
-App for watching VK videos with random pornstar.
+VK video search over 4000 pornstars
+
+## Motivation:
+
+- No adult videos in m.vk.com and VK iOS app
+- Tired to search for actresses
 
 ## Features:
 
-- Desktop:
+- Generate random actress
+- VK video search via API
 
-    - Generate random pornstart
-    - VK video search via Selenium
-    - Watched videos saving and further report generation 
-
-- [Web](https://rptp.herokuapp.com)
-
-    - Generate random pornstart
-    - VK video search via API
-
-## Requirements:
-
-- Python 3.6
-- Selenium
-- pip install -r requirements/desktop.txt
-
-## Usage:
-
-- python desktop_app.py - to watch videos
-- python desktop_app.py -m report - to generate report

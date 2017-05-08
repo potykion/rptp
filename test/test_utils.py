@@ -1,4 +1,5 @@
-from rptp.common.utils import truncate_left, truncate_right
+from rptp.common.string_utils import truncate_right
+from rptp import truncate_left
 
 
 # )

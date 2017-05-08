@@ -1,6 +1,6 @@
 import os
 
-from rptp.utils.string_utils import split_strip
+from rptp.common.string_utils import split_strip
 
 # DATA
 DATA_FOLDER = 'data/'
@@ -41,13 +41,11 @@ def set_up():
 def _load_login():
     global LOGIN, PASSWORD, TOKEN
 
-    login_string = 'sample_login, sample_pass'
-
     if os.path.exists(LOGIN_FILE):
         with open(LOGIN_FILE) as f:
             LOGIN, PASSWORD, TOKEN = split_strip(f.read())
     else:
-        login_string = input("Please enter your VK login and password in such format: 'login, password'").strip(' "')
+        login_string = input("Please enter your VK login and password in such format: 'login, password'").strip(' "\'')
         LOGIN, PASSWORD = split_strip(login_string)
 
         from rptp.vk_api import request_token

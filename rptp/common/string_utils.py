@@ -1,8 +1,5 @@
-import time
-
-
-def format_seconds(seconds):
-    return time.strftime('%H:%M:%S', time.gmtime(seconds))
+def split_strip(str_, delimiter=','):
+    return map(lambda login: login.strip(), str_.split(delimiter))
 
 
 def truncate_left(str_, len_=50):

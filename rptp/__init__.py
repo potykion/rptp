@@ -1,7 +1,8 @@
 import logging
 from flask import Flask, session, request, redirect, url_for, render_template
 
-from rptp.common.utils import format_seconds, truncate_left, truncate_right
+from rptp.common.time_utils import format_seconds
+from rptp.common.string_utils import truncate_left, truncate_right
 from rptp.vk_api import receive_token_from_code, generate_auth_link, find_videos, DEFAULT_OFFSET
 
 app = Flask(__name__)

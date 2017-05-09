@@ -1,5 +1,5 @@
 import logging
-from flask import Flask, session, request, redirect, url_for, render_template
+from flask import Flask, session, request, redirect, url_for, render_template, render_template_string
 
 from rptp.common.time_utils import format_seconds
 from rptp.common.string_utils import truncate_left, truncate_right
@@ -51,12 +51,12 @@ def hello():
             'auth_url': auth_link
         }
     else:
-        if request.args.get('refresh'):
-            query = actress_manager.generate_actress()
-        else:
-            query = request.args.get('query', actress_manager.generate_actress())
+        query = request.args.get('query')
 
-        offset = request.args.get('search', 0, type=int)
+        if not query:
+            return redirect(url_for('hello', query=actress_manager.generate_actress()))
+
+        offset = request.args.get('offset', 0, type=int)
 
         try:
             videos, count_ = find_videos(query, offset=offset, token=token)
@@ -71,7 +71,7 @@ def hello():
             videos, count_ = [], 0
         else:
             if not videos:
-                return redirect(url_for('hello'))
+                return redirect(url_for('hello', query=actress_manager.generate_actress()))
 
         context = {
             'token': token,

@@ -3,12 +3,20 @@
 {% block custom_js %}
     <script>
         $('document').ready(function () {
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            });
+
             $('.query-input').change(function () {
-                $('.search-button').val(0);
+                $('.search-btn').val(0);
             });
 
             $('.up-button').click(function () {
                 window.scrollTo(0, 0);
+            });
+
+            $('.refresh-btn').click(function (e) {
+                $('.query-input').val('').submit();
             });
 
             $('.truncated').hide()
@@ -29,15 +37,15 @@
                     <div class="input-group">
                         <input type="text" class="query-input form-control" placeholder="Search for..."
                                value="{{ query }}" name="query">
+
                         <span class="input-group-btn">
-                    <button name="refresh" value="1"
-                            class="btn btn-secondary" type="submit">
+                    <button class="refresh-btn btn btn-secondary">
                         <i class="fa fa-refresh" aria-hidden="true"></i> Refresh actress
                     </button>
                 </span>
                         <span class="input-group-btn">
-                    <button name="search" value="{{ offset + DEFAULT_OFFSET }}"
-                            class="search-button btn btn-secondary"
+                    <button name="offset" value="{{ offset + DEFAULT_OFFSET }}"
+                            class="search-btn btn btn-secondary"
                             type="submit">
                        <i class="fa fa-video-camera" aria-hidden="true"></i> Search videos
                     </button>
@@ -45,15 +53,21 @@
                     </div>
                 </form>
 
+
                 <p class="card-text mt-2">
-                    Shown from {{ offset }} to
-                    {% if offset + DEFAULT_OFFSET > count %}
-                        {{ count }}
-                    {% else %}
-                        {{ offset + DEFAULT_OFFSET }}
-                    {% endif %}
-                    out of {{ count }}.
+                    Shown from
+                    <u data-toggle="tooltip" data-placement="bottom"
+                       title="Only adult and non-blocked videos">
+                        {{ offset + 1 }} to
+                        {% if offset + DEFAULT_OFFSET > count %}
+                            {{ count }}
+                        {% else %}
+                            {{ offset + DEFAULT_OFFSET }}
+                        {% endif %}
+                    </u>
+                    out of {{ count }}
                 </p>
+
 
                 <div class="card-columns mt-3">
                     {% for video in videos %}
@@ -84,18 +98,20 @@
             <div class="card-footer">
                 <form method="get">
                     <div class="btn-group btn-group-lg">
+                        <input hidden type="text" class="query-input form-control" placeholder="Search for..."
+                               value="{{ query }}" name="query">
+
                         <button type="button" class="up-button btn btn-secondary">
                             <i class="fa fa-arrow-up" aria-hidden="true"></i>
                         </button>
 
-
-                        <button name="refresh" value="1"
-                                class="btn btn-secondary" type="submit">
+                        <button
+                                class="refresh-btn btn btn-secondary" type="submit">
                             <i class="fa fa-refresh" aria-hidden="true"></i>
                         </button>
 
-                        <button name="search" value="{{ offset + DEFAULT_OFFSET }}"
-                                class="search-button btn btn-secondary"
+                        <button name="offset" value="{{ offset + DEFAULT_OFFSET }}"
+                                class="search-btn btn btn-secondary"
                                 type="submit">
                             <i class="fa fa-video-camera" aria-hidden="true"></i>
                         </button>

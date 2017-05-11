@@ -15,7 +15,7 @@ def find_videos(query, offset=0, count=DEFAULT_OFFSET, token=None):
         'filters': 'mp4, long',
         'offset': offset,
         'count': count,
-        'v': 5.63,
+        'v': API_VERSION,
         'access_token': token
     }
 

@@ -3,7 +3,7 @@ from urllib.parse import urlencode
 
 import requests
 
-API_VERSION = 5.63
+API_VERSION = 5.64
 DEFAULT_OFFSET = 40
 
 
@@ -50,7 +50,7 @@ def generate_auth_link():
         'client_id': '4865149',
         'redirect_uri': 'https://rptp.herokuapp.com',
         'scope': 'video, offline',
-        'v': 5.63,
+        'v': API_VERSION,
         'response_type': 'code',
         'display': 'mobile'
     }

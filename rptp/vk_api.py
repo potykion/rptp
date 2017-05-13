@@ -1,5 +1,5 @@
 import os
-from urllib.parse import urlencode
+from urllib.parse import urlencode, parse_qs, urlparse
 
 import requests
 
@@ -84,4 +84,11 @@ def receive_token_from_code(code):
     """
     token_link = generate_token_receive_link(code)
     result = requests.get(token_link).json()
+    return result
+
+
+def receive_token_from_validation_url(validation_url):
+    resp = requests.get(validation_url)
+    result = parse_qs(urlparse(resp.url).fragment)
+    result.pop('success')
     return result

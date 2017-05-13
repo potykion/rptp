@@ -1,9 +1,11 @@
 import logging
-from flask import Flask, session, request, redirect, url_for, render_template, render_template_string
 
-from rptp.common.time_utils import format_seconds
+from flask import Flask, session, request, redirect, url_for, render_template
+
 from rptp.common.string_utils import truncate_left, truncate_right
-from rptp.vk_api import receive_token_from_code, generate_auth_link, find_videos, DEFAULT_OFFSET
+from rptp.common.time_utils import format_seconds
+from rptp.vk_api import receive_token_from_code, generate_auth_link, find_videos, DEFAULT_OFFSET, \
+    receive_token_from_validation_url
 
 app = Flask(__name__)
 app.jinja_env.filters['format_seconds'] = format_seconds
@@ -64,11 +66,9 @@ def hello():
             app.logger.info(e)
             message, error = e.args
 
-            if error['error_code'] == 5:
-                session.pop('access_token')
-                return redirect(url_for('hello'))
+            _process_error(error)
 
-            videos, count_ = [], 0
+            return redirect(url_for('hello'))
         else:
             if not videos:
                 return redirect(url_for('hello', query=actress_manager.generate_actress()))
@@ -83,3 +83,18 @@ def hello():
         }
 
     return render_template('video.html', **context)
+
+
+def _process_error(error):
+    error_code = error['error_code']
+
+    if error_code == 5:
+        session.pop('access_token')
+    elif error_code == 17:
+        result = receive_token_from_validation_url(error['redirect_uri'])
+
+        session.update(result)
+        user = User.get_or_create(result['user_id'])
+        user.update_token(result['access_token'])
+    else:
+        raise ValueError('Unknown error!')

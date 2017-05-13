@@ -89,6 +89,14 @@ def receive_token_from_code(code):
 
 def receive_token_from_validation_url(validation_url):
     resp = requests.get(validation_url)
-    result = parse_qs(urlparse(resp.url).fragment)
-    result.pop('success')
+    result_url = resp.url
+    result = parse_qs(urlparse(result_url).fragment)
+
+    if 'access_token' not in result:
+        raise LookupError('No token found in validate response url', {
+            'validation_url': validation_url,
+            'result_url': result_url,
+            'result': result
+        })
+
     return result

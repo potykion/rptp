@@ -91,10 +91,14 @@ def _process_error(error):
     if error_code == 5:
         session.pop('access_token')
     elif error_code == 17:
-        result = receive_token_from_validation_url(error['redirect_uri'])
-
-        session.update(result)
-        user = User.get_or_create(result['user_id'])
-        user.update_token(result['access_token'])
+        try:
+            result = receive_token_from_validation_url(error['redirect_uri'])
+        except LookupError as e:
+            app.logger.info(e)
+            raise RuntimeError('Failed to process error!')
+        else:
+            session.update(result)
+            user = User.get_or_create(result['user_id'])
+            user.update_token(result['access_token'])
     else:
         raise ValueError('Unknown error!')

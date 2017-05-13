@@ -4,6 +4,7 @@ from rptp.config import TOKEN
 from rptp.vk_api import find_videos
 
 
+@pytest.mark.skip
 @pytest.mark.parametrize('q, count', [
     ('sasha', 40),
     ('Grace C', 40),

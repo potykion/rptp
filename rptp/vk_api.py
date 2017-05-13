@@ -3,8 +3,12 @@ from urllib.parse import urlencode, parse_qs, urlparse
 
 import requests
 
+# todo as environ vars
 API_VERSION = 5.64
 DEFAULT_OFFSET = 40
+
+APP_ID = 6030754
+REDIRECT_URI = 'https://rptp.herokuapp.com'
 
 
 def find_videos(query, offset=0, count=DEFAULT_OFFSET, token=None):
@@ -47,8 +51,8 @@ def generate_auth_link():
     base_url = 'https://oauth.vk.com/authorize'
 
     auth_params = {
-        'client_id': '4865149',
-        'redirect_uri': 'https://rptp.herokuapp.com',
+        'client_id': APP_ID,
+        'redirect_uri': REDIRECT_URI,
         'scope': 'video, offline',
         'v': API_VERSION,
         'response_type': 'code',
@@ -64,8 +68,8 @@ def generate_token_receive_link(code):
     base_url = 'https://oauth.vk.com/access_token'
 
     token_params = {
-        'client_id': '4865149',
-        'redirect_uri': 'https://rptp.herokuapp.com',
+        'client_id': APP_ID,
+        'redirect_uri': REDIRECT_URI,
         'client_secret': os.environ['CLIENT_SECRET'],
         'code': code
     }

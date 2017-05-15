@@ -39,14 +39,13 @@ def setup_logging():
 
 
 def token_required(f):
-    @wraps
+    @wraps(f)
     def wrapper(*args, **kwargs):
         if 'access_token' not in session:
             return redirect(url_for('auth_view'))
         return f(*args, **kwargs)
 
     return wrapper
-
 
 
 @app.route('/videos')

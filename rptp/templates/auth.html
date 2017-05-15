@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="card-block">
-        <p class="card-text">Please log in to VK.</p>
-        <a href="{{ auth_url }}" class="btn btn-primary btn-lg">
-            <i class="fa fa-vk" aria-hidden="true"></i>
-        </a>
+    <div class="card text-center">
+        <div class="card-block">
+            <p class="card-text">Please log in to VK.</p>
+            <a href="{{ auth_url }}" class="btn btn-primary btn-lg">
+                <i class="fa fa-vk" aria-hidden="true"></i>
+            </a>
+        </div>
     </div>
 {% endblock %}

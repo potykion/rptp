@@ -2,49 +2,79 @@ import os
 from urllib.parse import urlencode, parse_qs, urlparse
 
 import requests
+from flask import session
+from typing import Dict, Iterable, Any, List, Tuple
 
 # todo as environ vars
-API_VERSION = 5.64
-DEFAULT_OFFSET = 40
-
+# heroku config
 APP_ID = 6030754
-REDIRECT_URI = 'https://rptp.herokuapp.com'
+REDIRECT_URI = 'https://rptp.herokuapp.com/auth'
+
+# vk config
+API_BASE_URL = 'https://api.vk.com/method'
+API_VERSION = 5.64
+
+# app config
+VK_VIDEO_SEARCH_PARAMS = {
+    'sort': 0,
+    'hd': 1,
+    'filters': 'mp4, long',
+    'adult': 1,
+    'v': API_VERSION
+}
+VIDEO_COUNT = 3 * 13
+
+VideoList = List[Dict[str, Any]]
 
 
-def find_videos(query, offset=0, count=DEFAULT_OFFSET, token=None):
-    params = {
+def request_adult_videos(query: str, offset: int = 0, count: int = VIDEO_COUNT) -> Tuple[VideoList, int]:
+    offset = offset
+    adult_videos = []
+
+    while len(adult_videos) < count:
+        videos = search_videos(query, offset, count)
+        offset += count
+
+        if not videos:
+            break
+
+        adult_videos += list(filter_adult_videos(videos))
+
+    return adult_videos[:count], offset
+
+
+def search_videos(query: str, offset: int = 0, count: int = VIDEO_COUNT) -> VideoList:
+    token = session.get('access_token')
+
+    video_search_url = f'{API_BASE_URL}/video.search'
+    video_search_params = build_video_search_params(query, token, count=count, offset=offset)
+
+    videos_json = requests.get(video_search_url, video_search_params).json()
+
+    return extract_videos(videos_json)
+
+
+def extract_videos(videos_json: Dict[str, Any]):
+    if 'response' not in videos_json:
+        raise LookupError('Failed to find videos', videos_json['error'])
+
+    return videos_json['response']['items']
+
+
+def build_video_search_params(query: str, token: str, **kwargs: Any):
+    params = dict(VK_VIDEO_SEARCH_PARAMS)
+    params.update({
         'q': query,
-        'sort': 0,
-        'hd': 1,
-        'filters': 'mp4, long',
-        'offset': offset,
-        'count': count,
-        'v': API_VERSION,
-        'access_token': token
-    }
+        'access_token': token,
+    })
+    params.update(**kwargs)
+    return params
 
-    if 'IS_HEROKU' in os.environ:
-        params.update({
-            'adult': 1,
-        })
-    else:
-        params.update({
-            'adult': 1,
-        })
 
-    base_url = 'https://api.vk.com/method/'
-    video_search_url = '{}{}'.format(base_url, 'video.search')
-
-    result = requests.get(video_search_url, params).json()
-
-    if 'response' in result:
-        videos = result['response']['items']
-        count_ = result['response']['count']
-        if params.get('adult'):
-            videos = list(filter(lambda video: not video['can_add'], videos))
-        return videos, count_
-
-    raise LookupError('Failed to search videos', result['error'])
+def filter_adult_videos(videos: Iterable[Dict[str, Any]]):
+    for video in videos:
+        if not video['can_add']:
+            yield video
 
 
 def generate_auth_link():
@@ -70,6 +100,7 @@ def generate_token_receive_link(code):
     token_params = {
         'client_id': APP_ID,
         'redirect_uri': REDIRECT_URI,
+        # todo rename to VK_CLIENT_SECRET
         'client_secret': os.environ['CLIENT_SECRET'],
         'code': code
     }

@@ -7,8 +7,6 @@ from rptp import app
 from rptp.common.models import ActressProxy
 
 if 'IS_HEROKU' in os.environ:
-    app.secret_key = os.environ['SECRET_KEY']
-
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
     db = SQLAlchemy(app)
 

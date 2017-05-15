@@ -62,7 +62,7 @@ def videos_view():
     offset = request.args.get('offset', 0, type=int)
 
     try:
-        videos, offset = request_adult_videos(query, offset)
+        videos, new_offset = request_adult_videos(query, offset)
     except LookupError as e:
         app.logger.info(e)
         raise e
@@ -74,7 +74,7 @@ def videos_view():
     context = {
         'videos': videos,
         'query': query,
-        'offset': offset,
+        'offset': new_offset,
         'VIDEO_COUNT': VIDEO_COUNT
     }
 

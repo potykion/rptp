@@ -28,19 +28,19 @@ VideoList = List[Dict[str, Any]]
 
 
 def request_adult_videos(query: str, offset: int = 0, count: int = VIDEO_COUNT) -> Tuple[VideoList, int]:
-    offset = offset
+    final_offset = offset
     adult_videos = []
 
     while len(adult_videos) < count:
-        videos = search_videos(query, offset, count)
-        offset += count
+        videos = search_videos(query, final_offset, count)
+        final_offset += count
 
         if not videos:
             break
 
         adult_videos += list(filter_adult_videos(videos))
 
-    return adult_videos[:count], offset
+    return adult_videos[:count], final_offset
 
 
 def search_videos(query: str, offset: int = 0, count: int = VIDEO_COUNT) -> VideoList:

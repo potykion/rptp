@@ -48,8 +48,9 @@ def token_required(f):
     return wrapper
 
 
-@token_required
+
 @app.route('/videos')
+@token_required
 def videos_view():
     """
     View for showing and querying videos .

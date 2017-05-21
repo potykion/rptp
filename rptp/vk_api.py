@@ -38,7 +38,10 @@ def request_adult_videos(query: str, offset: int = 0, count: int = VIDEO_COUNT) 
         if not videos:
             break
 
-        adult_videos += list(filter_adult_videos(videos))
+        if VK_VIDEO_SEARCH_PARAMS.get('adult', 0):
+            videos = filter_adult_videos(videos)
+
+        adult_videos += list(videos)
 
     return adult_videos[:count], final_offset
 

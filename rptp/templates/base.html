@@ -35,7 +35,7 @@
     <a class="navbar-brand" href="/">RPTP - VK video search over 4000 pornstars</a>
 </nav>
 
-<div class="container-fluid mt-4">
+<div class="{% if is_mobile %}container-fluid{% else %}container{% endif %} mt-4">
     {% block content %}
     {% endblock %}
 </div>

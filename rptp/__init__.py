@@ -6,6 +6,7 @@ from flask import Flask, session, request, redirect, url_for, render_template
 
 from rptp.common.string_utils import truncate_left, truncate_right
 from rptp.common.time_utils import format_seconds
+from rptp.common.web_utils import is_mobile_user_agent
 from rptp.vk_api import receive_token_from_code, generate_auth_link, \
     receive_token_from_validation_url, search_videos, request_adult_videos, VIDEO_COUNT
 
@@ -75,7 +76,8 @@ def videos_view():
         'videos': videos,
         'query': query,
         'offset': new_offset,
-        'VIDEO_COUNT': VIDEO_COUNT
+        'VIDEO_COUNT': VIDEO_COUNT,
+        'is_mobile': is_mobile_user_agent(request)
     }
 
     return render_template('video.html', **context)

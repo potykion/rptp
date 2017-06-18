@@ -52,10 +52,12 @@
         <a class="navbar-brand" href="/">RPTP</a>
     </div>
 
-    <ul class="nav navbar-nav navbar-right ml-auto">
-        <li><a href="https://vk.com/id{{ user.user_id }}"><span class="glyphicon glyphicon-log-in"></span>
-            id{{ user.user_id }}</a></li>
-    </ul>
+    {% if user %}
+        <ul class="nav navbar-nav navbar-right ml-auto">
+            <li><a href="https://vk.com/id{{ user.user_id }}"><span class="glyphicon glyphicon-log-in"></span>
+                id{{ user.user_id }}</a></li>
+        </ul>
+    {% endif %}
 </nav>
 
 <div id="main-container" class="container mt-4">

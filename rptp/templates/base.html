@@ -20,6 +20,27 @@
             integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn"
             crossorigin="anonymous"></script>
 
+
+    <script>
+        $(document).ready(function () {
+            $(window).on('resize', function () {
+                var mainContainer = $('#main-container');
+
+                if ($(window).width() > 1024) {
+                    mainContainer.addClass('container');
+                    mainContainer.removeClass('container-fluid');
+                }
+                else {
+                    mainContainer.addClass('container-fluid');
+                    mainContainer.removeClass('container');
+                }
+            });
+
+            $(window).trigger('resize');
+        });
+
+    </script>
+
     {% block custom_js %}
     {% endblock %}
 </head>
@@ -27,15 +48,17 @@
 
 
 <nav class="navbar navbar-toggleable-xl navbar-light bg-faded">
-    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-            aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <a class="navbar-brand" href="/">RPTP - VK video search over 4000 pornstars</a>
+    <div class="navbar-header">
+        <a class="navbar-brand" href="/">RPTP</a>
+    </div>
+
+    <ul class="nav navbar-nav navbar-right ml-auto">
+        <li><a href="https://vk.com/id{{ user.user_id }}"><span class="glyphicon glyphicon-log-in"></span>
+            id{{ user.user_id }}</a></li>
+    </ul>
 </nav>
 
-<div class="{% if is_mobile %}container-fluid{% else %}container{% endif %} mt-4">
+<div id="main-container" class="container mt-4">
     {% block content %}
     {% endblock %}
 </div>

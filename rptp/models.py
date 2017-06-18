@@ -1,6 +1,7 @@
 import json
 import os
 
+from flask import session
 from flask_sqlalchemy import SQLAlchemy
 
 from rptp import app
@@ -92,5 +93,14 @@ else:
 
         def serialize(self, actress):
             return actress
+
+
+    class User:
+        @classmethod
+        def get_or_create(cls, user_id):
+            return {
+                'user_id': session['user_id'],
+                'access_token': session['access_token']
+            }
 
 actress_manager = ActressManager()

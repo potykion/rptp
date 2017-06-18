@@ -6,7 +6,6 @@ from flask import Flask, session, request, redirect, url_for, render_template
 
 from rptp.common.string_utils import truncate_left, truncate_right
 from rptp.common.time_utils import format_seconds
-from rptp.common.web_utils import is_mobile_user_agent
 from rptp.vk_api import receive_token_from_code, generate_auth_link, \
     receive_token_from_validation_url, search_videos, request_adult_videos, VIDEO_COUNT
 
@@ -31,6 +30,7 @@ def app_setup():
         return
     else:
         session['access_token'] = TOKEN
+        session['user_id'] = 16231309
 
 
 @app.before_first_request
@@ -72,12 +72,14 @@ def videos_view():
             # no videos found try another actress
             return redirect(url_for('videos_view', query=actress_manager.generate_actress()))
 
+    user = User.get_or_create(session['user_id'])
+
     context = {
-        'videos': videos,
+        # 'videos': videos,
         'query': query,
         'offset': new_offset,
         'VIDEO_COUNT': VIDEO_COUNT,
-        'is_mobile': is_mobile_user_agent(request)
+        'user': user
     }
 
     return render_template('video.html', **context)
@@ -98,7 +100,10 @@ def auth_view():
 
         return redirect(url_for('main_view'))
 
-    return render_template('auth.html', auth_url=generate_auth_link())
+    return render_template(
+        'auth.html',
+        auth_url=generate_auth_link()
+    )
 
 
 @app.route("/")

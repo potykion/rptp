@@ -75,7 +75,7 @@ def videos_view():
     user = User.get_or_create(session['user_id'])
 
     context = {
-        # 'videos': videos,
+        'videos': videos,
         'query': query,
         'offset': new_offset,
         'VIDEO_COUNT': VIDEO_COUNT,

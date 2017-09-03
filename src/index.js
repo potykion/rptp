@@ -1,5 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './components/App';
+import Root from "./components/Root";
 
-ReactDOM.render(<App/>, document.getElementById('root'));
+import injectTapEventPlugin from 'react-tap-event-plugin';
+import configureStore from "./configureStore";
+
+injectTapEventPlugin();
+
+const store = configureStore();
+
+ReactDOM.render(
+    <Root store={store}/>,
+    document.getElementById('root')
+);

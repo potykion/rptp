@@ -1,18 +1,32 @@
 import React, {Component} from 'react';
+import {connect} from "react-redux";
+import {computeContainerWidth} from "../actions";
 
 class App extends Component {
+
+    componentDidMount() {
+        window.addEventListener("resize", this.onResize);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.onResize);
+    }
+
+    onResize = () => {
+        this.props.dispatch(computeContainerWidth());
+    };
+
     render() {
         return (
-            <div className="App">
-                <div className="App-header">
-                    <h2>Welcome to React</h2>
-                </div>
-                <p className="App-intro">
-                    To get started, edit <code>src/App.js</code> and save to reload.
-                </p>
-            </div>
+            <h1>{this.props.width}</h1>
         );
     }
 }
+
+App = connect(
+    (state) => ({
+        ...state
+    })
+)(App);
 
 export default App;

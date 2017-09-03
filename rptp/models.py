@@ -82,6 +82,12 @@ if 'IS_HEROKU' in os.environ:
 
             return user
 
+        @classmethod
+        def print_profiles(cls):
+            users = cls.query.all()
+            vk_ids = map(lambda user: user.user_id, users)
+            return '\n'.join('vk.com/id{}'.format(id_) for id_ in vk_ids)
+
         def update_token(self, token):
             self.access_token = token
             db.session.commit()

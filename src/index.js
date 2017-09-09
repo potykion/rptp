@@ -1,9 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+import 'bootstrap/dist/css/bootstrap.css';
 import Root from "./components/Root";
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import configureStore from "./configureStore";
+
+
+
 
 injectTapEventPlugin();
 

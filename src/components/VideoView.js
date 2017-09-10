@@ -5,8 +5,8 @@ import {connect} from "react-redux";
 
 import SearchIcon from 'material-ui/svg-icons/action/search';
 
-let VideoView = ({width, kittySet}) => (
-    <Paper className='mt-3' style={{width: width, margin: 'auto'}}>
+let VideoView = ({width, kittySetting}) => (
+    <Paper style={{width: width, margin: 'auto'}}>
         <div style={{textAlign: 'center', paddingTop: 20}}>
             <TextField
                 style={{width: width / 2, marginRight: 5}}
@@ -27,7 +27,7 @@ let VideoView = ({width, kittySet}) => (
                 <Card style={{margin: 10, width: width / 4}}>
                     <CardMedia>
                         <img
-                            src={kittySet ? KITTY_IMAGE : video.thumb}
+                            src={kittySetting ? KITTY_IMAGE : video.thumb}
                             alt="" style={{cursor: 'pointer'}} onClick={() => {
                             alert('op')
                         }}/>
@@ -45,7 +45,7 @@ let VideoView = ({width, kittySet}) => (
 
 VideoView = connect(state => ({
     width: state.gui.width,
-    kittySet: state.gui.kittySet
+    kittySetting: state.gui.kittySetting
 }))(VideoView);
 
 

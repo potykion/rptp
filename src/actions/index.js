@@ -23,3 +23,7 @@ export const openSettingsDialog = () => ({
 export const closeSettingsDialog = () => ({
     type: 'CLOSE_SETTINGS_DIALOG'
 });
+
+export const toggleKittySetting = () => ({
+    type: 'TOGGLE_KITTY_SETTING'
+});

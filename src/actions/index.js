@@ -7,3 +7,19 @@ export const computeContainerWidth = () => {
         width
     }
 };
+
+export const openActionDrawer = () => ({
+    type: 'OPEN_ACTION_DRAWER'
+});
+
+export const closeDrawer = () => ({
+    type: 'CLOSE_ACTION_DRAWER'
+});
+
+export const openSettingsDialog = () => ({
+    type: 'OPEN_SETTINGS_DIALOG'
+});
+
+export const closeSettingsDialog = () => ({
+    type: 'CLOSE_SETTINGS_DIALOG'
+});

@@ -1,3 +1,5 @@
+import {requestVideos} from "../api";
+
 export const computeContainerWidth = () => {
     const width = (window.innerWidth > 1064)
         ? 1064
@@ -27,3 +29,11 @@ export const closeSettingsDialog = () => ({
 export const toggleKittySetting = () => ({
     type: 'TOGGLE_KITTY_SETTING'
 });
+
+
+export const findVideos = (actress, offset) => (dispatch) =>
+    requestVideos(actress, offset).then(
+        ({videos, offset}) => {
+            dispatch({type: 'FIND_VIDEOS', videos, offset});
+        }
+    );

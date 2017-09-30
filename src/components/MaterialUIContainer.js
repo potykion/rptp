@@ -14,6 +14,7 @@ import MainAppBar from "./MainAppBar";
 import VideoView from "./VideoView";
 import RefreshFloatingActionButton from "./RefreshFloatingActionButton";
 import {connect} from "react-redux";
+import {Redirect, Route, Router, withRouter} from "react-router-dom";
 
 
 let MaterialUIContainer = ({kittySetting}) => {
@@ -27,7 +28,7 @@ let MaterialUIContainer = ({kittySetting}) => {
         });
     }
     else {
-      muiTheme = getMuiTheme({
+        muiTheme = getMuiTheme({
             palette: {
                 primary1Color: pink100
             }
@@ -41,8 +42,14 @@ let MaterialUIContainer = ({kittySetting}) => {
             <div>
                 <MainAppBar/>
                 <Paper>
-                    <VideoView/>
-                    <RefreshFloatingActionButton/>
+                    <Route
+                        exact={true}
+                        path='/'
+                        render={() => (<Redirect push to={`/search/Sasha`}/>)}/>
+                    <Route
+                        path='/search/:actress/:offset?'
+                        component={VideoView}
+                    />
                 </Paper>
             </div>
         </MuiThemeProvider>
@@ -50,10 +57,11 @@ let MaterialUIContainer = ({kittySetting}) => {
 
 };
 
-MaterialUIContainer = connect((state) => ({
+
+MaterialUIContainer = withRouter(connect((state) => ({
         kittySetting: state.gui.kittySetting
     })
-)(MaterialUIContainer);
+)(MaterialUIContainer));
 
 
 export default MaterialUIContainer;

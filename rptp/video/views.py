@@ -19,4 +19,9 @@ def video_search_view(request: Request):
     vk_videos, offset = filter_adult_videos(vk_videos, count)
     videos = format_vk_videos(vk_videos)
 
-    return Response(data={'videos': list(videos), 'offset': offset})
+    return Response(
+        data={'videos': list(videos), 'offset': offset},
+        headers={
+            'Access-Control-Allow-Origin': '*'
+        }
+    )

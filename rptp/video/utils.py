@@ -4,13 +4,14 @@ from typing import Tuple, Iterable, Dict
 from rptp.common.utils import last
 
 
-def filter_adult_videos(vk_videos: Iterable[Dict], required_count=30) -> Tuple[Iterable, int]:
+def filter_adult_videos(vk_videos: Iterable[Dict], required_count=30, initial_offset=0) -> Tuple[Iterable, int]:
     """
     Filter adult vk videos.
 
     Args:
         vk_videos: List of VK-videos.
         required_count: Required adult videos count.
+        initial_offset: Initial offset.
 
     Returns:
         List of adult videos and index of last video in input list.
@@ -35,4 +36,4 @@ def filter_adult_videos(vk_videos: Iterable[Dict], required_count=30) -> Tuple[I
 
     index, videos = zip(*islice(adult_videos, required_count))
 
-    return videos, last(index)
+    return videos, last(index) + initial_offset

@@ -6,20 +6,36 @@ from rest_framework.request import Request
 from rptp.users.models import User
 
 
-class VkAcceessTokenAuthentication(authentication.BaseAuthentication):
+class VkAccessTokenAuthenticationBackend:
+    def authenticate(self, request, access_token=None, user_id=None, **kwargs):
+        try:
+            return User.objects.get(access_token=access_token, user_id=user_id)
+        except User.DoesNotExists:
+            return None
+
+    def get_user(self, user_id):
+        try:
+            return User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return None
+
+
+class VkAcceessTokenAPIAuthentication(authentication.BaseAuthentication):
     def authenticate(self, request: Request) -> Tuple[User, Any]:
         """
         Get access token from request, try to find user with such access token.
         Args:
-            request: Request with access_token query param.
+            request: Request with access_token query param / session key.
 
         Returns:
             Tuple of user and auth object (e.g. token or None).
 
         """
-        try:
-            access_token = request.query_params['access_token']
-        except KeyError:
+
+        access_token = request.query_params.get('access_token', None) or \
+                       request.session.get('access_token', None)
+
+        if not access_token:
             raise exceptions.AuthenticationFailed('No access token passed')
 
         try:

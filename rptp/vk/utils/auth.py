@@ -5,6 +5,12 @@ from rptp.vk.utils.config import APP_ID, AUTH_REDIRECT_URI, API_VERSION, CLIENT_
 
 
 def generate_auth_link():
+    """
+    Generate authorization url.
+    Returns:
+        Authorization url.
+
+    """
     base_url = 'https://oauth.vk.com/authorize'
 
     auth_params = {
@@ -20,18 +26,17 @@ def generate_auth_link():
 
     return auth_url
 
+
 def receive_token_from_code(code):
     """
-    Get token from auth code.
-    :param code: Auth code returned after authorization.
-    :return: Token json:
-    {"access_token":"533bacf01e11f55b536a565b57531ac114461ae8736d6506a3", "expires_in":43200, '''user_id":66748}
-    """
-    token_link = generate_token_receive_link(code)
-    result = requests.get(token_link).json()
-    return result
+    Request token data by input code.
 
-def generate_token_receive_link(code):
+    Args:
+        code: Code for token receive.
+
+    Returns:
+        Token request data.
+    """
     base_url = 'https://oauth.vk.com/access_token'
 
     token_params = {
@@ -43,4 +48,4 @@ def generate_token_receive_link(code):
 
     token_url = '{}?{}'.format(base_url, urlencode(token_params))
 
-    return token_url
+    return requests.get(token_url).json()

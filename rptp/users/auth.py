@@ -1,3 +1,5 @@
+from typing import Tuple, Any
+
 from rest_framework import authentication, exceptions
 from rest_framework.request import Request
 
@@ -5,7 +7,16 @@ from rptp.users.models import User
 
 
 class VkAcceessTokenAuthentication(authentication.BaseAuthentication):
-    def authenticate(self, request: Request):
+    def authenticate(self, request: Request) -> Tuple[User, Any]:
+        """
+        Get access token from request, try to find user with such access token.
+        Args:
+            request: Request with access_token query param.
+
+        Returns:
+            Tuple of user and auth object (e.g. token or None).
+
+        """
         try:
             access_token = request.query_params['access_token']
         except KeyError:
@@ -17,3 +28,22 @@ class VkAcceessTokenAuthentication(authentication.BaseAuthentication):
             raise exceptions.AuthenticationFailed('No such user')
 
         return user, None
+
+
+def update_user_token(user_id: int, access_token: str) -> User:
+    """
+    Get or create user by user_id, update its token.
+    Args:
+        user_id: User id, if no user with such id then new user is created.
+        access_token: New token.
+
+    Returns:
+        User with updated token.
+
+    """
+    user, _ = User.objects.get_or_create(
+        user_id=user_id,
+    )
+    user.access_token = access_token
+    user.save()
+    return user

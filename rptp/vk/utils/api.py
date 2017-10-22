@@ -6,6 +6,10 @@ API_URL = 'https://api.vk.com/method'
 
 
 class VkApi:
+    """
+    VK API wrapper.
+    """
+
     def __init__(self, access_token):
         self.access_token = access_token
         self.path = []
@@ -28,6 +32,20 @@ class VkApi:
 
 
 def request_vk_videos(access_token, query, count, offset):
+    """
+    Receive videos from VK API via video.search_. method
+    .. _video.search: https://vk.com/dev/video.search
+
+    Args:
+        access_token: VK access token.
+        query: Video query.
+        count: Video count.
+        offset: Video offset.
+
+    Returns:
+        List of VK videos.
+
+    """
     vk_api = VkApi(access_token)
     default_params = {
         'sort': 0,

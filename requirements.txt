@@ -1,2 +1,12 @@
+certifi==2017.7.27.1
+chardet==3.0.4
+colorama==0.3.9
 Django==1.11.4
+djangorestframework==3.6.4
+idna==2.6
+py==1.4.34
+pytest==3.2.2
+pytest-django==3.1.2
 pytz==2017.2
+requests==2.18.4
+urllib3==1.22

@@ -32,7 +32,7 @@ class TestViews(VkApiTest):
 
             url = '/api/video/search'
             params = urlencode({
-                'q': 'Sasha',
+                'query': 'Sasha',
                 'count': video_count,
                 'access_token': vk_access_token
             })

@@ -37,6 +37,6 @@ class TestViews(VkApiTest):
                 'access_token': vk_access_token
             })
 
-            response: Response = client.get(f'{url}?{params}')
+            response = client.get(f'{url}?{params}')
 
         assert 'offset' in response.data and len(response.data['videos']) == video_count

@@ -1,6 +1,6 @@
 import pytest
 
-from rptp.vk.utils import VkApi
+from rptp.vk.utils.api import VkApi
 
 
 class VkApiTest:

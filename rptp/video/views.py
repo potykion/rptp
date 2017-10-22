@@ -1,14 +1,16 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.request import Request
 from rest_framework.response import Response
 
+from rptp.users.auth import VkAcceessTokenAuthentication
 from rptp.video.utils import filter_adult_videos, format_vk_videos
-from rptp.vk.utils import request_vk_videos
+from rptp.vk.utils.api import request_vk_videos
 
 generate_model = lambda: 'Sasha'
 
 
 @api_view(['GET'])
+@authentication_classes((VkAcceessTokenAuthentication, ))
 def video_search_view(request: Request):
     query = request.query_params.get('q', generate_model())
     count = int(request.query_params.get('count', 30))

@@ -1,10 +1,11 @@
 import requests
 
+from rptp.vk.utils.config import API_VERSION
+
+API_URL = 'https://api.vk.com/method'
+
 
 class VkApi:
-    URL = 'https://api.vk.com/method'
-    VERSION = 5.68
-
     def __init__(self, access_token):
         self.access_token = access_token
         self.path = []
@@ -14,10 +15,10 @@ class VkApi:
         return self
 
     def __call__(self, *args, **kwargs):
-        url = f'{VkApi.URL}/{self}'
+        url = f'{API_URL}/{self}'
         response = requests.get(url, params={
             **kwargs,
-            'v': VkApi.VERSION,
+            'v': API_VERSION,
             'access_token': self.access_token
         })
         return response.json()
@@ -34,6 +35,9 @@ def request_vk_videos(access_token, query, count, offset):
         'adult': 1,
         'filters': 'mp4,long',
     }
-    vk_response = vk_api.video.search(**default_params, q=query, count=count, offset=offset)
+    vk_response = vk_api.video.search(
+        **default_params,
+        q=query, count=count, offset=offset
+    )
     vk_videos = vk_response['response']['items']
     return vk_videos

@@ -14,4 +14,5 @@ def load_actresses():
 
             model['ptg_link'] = model.pop('link')
 
-            Actress.objects.create(**model)
+    actresses = [Actress(**model) for model in models]
+    Actress.objects.bulk_create(actresses)

@@ -4,7 +4,7 @@ from rest_framework.exceptions import ValidationError
 from rptp.video.models import Video
 
 
-class VkVideoSearchQueryParamsSerializer(serializers.Serializer):
+class VideoSearchSerializer(serializers.Serializer):
     """
     Validate query parameters required for search.
     """

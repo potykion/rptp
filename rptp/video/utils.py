@@ -1,10 +1,10 @@
 from itertools import islice
-from typing import Tuple, Iterable, Dict
+from typing import Tuple, Iterable, Dict, List
 
 from rptp.common.utils import last
 
 
-def filter_adult_videos(vk_videos: Iterable[Dict], required_count=30, initial_offset=0) -> Tuple[Iterable, int]:
+def filter_adult_videos(vk_videos: Iterable[Dict], required_count=30, initial_offset=0) -> Tuple[List, int]:
     """
     Filter adult vk videos.
 
@@ -22,11 +22,13 @@ def filter_adult_videos(vk_videos: Iterable[Dict], required_count=30, initial_of
     ...     {'can_add': False},
     ...     {'can_add': False}
     ... ], 2)
-    >>> videos = list(videos)
     >>> len(videos)
     2
     >>> index
-    2
+    3
+    >>> videos, index = filter_adult_videos([], 2)
+    >>> videos == [] and index == 1
+    True
     """
     adult_videos = (
         (index, video)
@@ -34,6 +36,8 @@ def filter_adult_videos(vk_videos: Iterable[Dict], required_count=30, initial_of
         if not video['can_add']
     )
 
-    index, videos = zip(*islice(adult_videos, required_count))
-
-    return videos, last(index) + initial_offset
+    try:
+        index, videos = zip(*islice(adult_videos, required_count))
+        return list(videos), last(index) + initial_offset + 1
+    except ValueError:
+        return [], initial_offset + 1

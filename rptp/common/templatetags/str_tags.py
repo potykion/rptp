@@ -4,11 +4,12 @@ register = template.Library()
 
 
 @register.filter
-def truncate_left(text, max_len=50):
+def truncate_left(text: str, max_len=40):
     """
     Split input text, join its parts while result length is less than input length.
 
     Args:
+        sep:
         text: Input text.
         max_len: Maximum length.
 
@@ -16,17 +17,29 @@ def truncate_left(text, max_len=50):
         Truncated text.
 
     >>> truncate_left('Ariel.temple Milf mature Ass Babes Няшка Русское домашние Порно anal fuck блондиночка сосёт Эротика Секс в попу Молоденькие br')
-    'Ariel.temple Milf mature Ass Babes Няшка Русское'
+    'Ariel.temple Milf mature Ass Babes Няшка'
+    >>> truncate_left('latinasextapes.17.09.25.alba.desilva.curvy.latina.futbol.babe')
+    'latinasextapes.17.09.25.alba.desilva'
     """
 
-    splitted = text.split()
-    truncated = splitted.pop(0)
-    for chunk in splitted:
-        if len('{} {}'.format(truncated, chunk)) > max_len:
-            return truncated
-        truncated += ' ' + chunk
+    result = text
 
-    return truncated
+    for separator in [' ', '.', ',']:
+        splitted = result.split(sep=separator)
+        truncated = splitted.pop(0)
+
+        for chunk in splitted:
+            new_truncated = '{}{}{}'.format(truncated, separator, chunk)
+            if len(new_truncated) > max_len:
+                return truncated
+            truncated = new_truncated
+
+        if len(truncated) <= 50:
+            return truncated
+
+        result = truncated
+
+    return result[:50]
 
 
 @register.filter

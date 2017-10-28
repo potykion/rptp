@@ -39,4 +39,33 @@ class TestViews(VkApiTest):
 
             response = client.get(f'{url}?{params}')
 
-        assert 'offset' in response.data and len(response.data['videos']) == video_count
+        response_data = dict(response.data)
+        videos = response_data.pop('videos')
+
+        assert response_data == {'offset': 42, 'query': 'Sasha'} and len(videos) == video_count
+
+    def test_video_search_view_for_actress_without_videos(self, client: Client, vk_access_token):
+        """
+        Given client, and actress without videos,
+        When request videos,
+        Then response contains no videos.
+        """
+        with mock.patch('requests.get') as mock_response:
+            mock_response.return_value = mock.MagicMock(
+                json=lambda: {'response': {'items': []}}
+            )
+
+            url = '/api/video/search'
+            params = urlencode({
+                'query': 'Eszter',
+                'offset': 1,
+                'access_token': vk_access_token
+            })
+
+            response = client.get(f'{url}?{params}')
+
+        assert response.data == {
+            'videos': [],
+            'offset': 2,
+            'query': 'Eszter'
+        }

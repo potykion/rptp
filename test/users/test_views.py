@@ -14,7 +14,7 @@ def code():
 
 @pytest.fixture()
 def auth_link():
-    return 'https://oauth.vk.com/authorize?client_id=6030754&redirect_uri=https%3A%2F%2Frptp.herokuapp.com%2Fapi%2Fauth&scope=video%2C+offline&v=5.68&response_type=code&display=mobile'
+    return 'https://oauth.vk.com/authorize?client_id=6030754&redirect_uri=https%3A%2F%2Frptp.herokuapp.com%2Fauth&scope=video%2C+offline&v=5.68&response_type=code&display=mobile'
 
 
 @pytest.fixture()
@@ -94,3 +94,26 @@ def test_auth_view_with_invalid_code(client: Client, code, invalid_code_data, au
     assert response.data == {
         "auth_url": auth_link
     }
+
+
+@pytest.mark.django_db
+def test_auth_template_view(client: Client, code, token_data):
+    """
+    Given client, code,
+    When go to auth_template_view with code,
+    Then user is created and logged in.
+    """
+    with mock.patch('requests.get') as vk_response:
+        vk_response.return_value = mock.MagicMock(
+            json=lambda: token_data,
+        )
+        client.get('{}?{}'.format(
+            reverse('client:auth'),
+            'code={}'.format(code)
+        ))
+
+    assert User.objects.get(user_id=token_data['user_id'])
+
+
+
+

@@ -8,10 +8,10 @@ from rptp.users.models import User
 
 class VkAccessTokenAuthenticationBackend:
     def authenticate(self, request, access_token=None, user_id=None, **kwargs):
-        try:
-            return User.objects.get(access_token=access_token, user_id=user_id)
-        except User.DoesNotExists:
-            return None
+        user, _ = User.objects.get_or_create(user_id=user_id)
+        user.access_token = access_token
+        user.save()
+        return user
 
     def get_user(self, user_id):
         try:

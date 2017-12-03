@@ -11,8 +11,9 @@ from test.vk.setup import VkApiTest
 
 
 @pytest.fixture(autouse=True)
-def setup_user(vk_access_token):
-    User.objects.create(access_token=vk_access_token)
+def setup_users(vk_access_token):
+    User.objects.create(access_token=vk_access_token, username=16231309)
+    User.objects.create(access_token='op', username=1)
 
 
 @pytest.mark.django_db
@@ -69,3 +70,19 @@ class TestViews(VkApiTest):
             'offset': 2,
             'query': 'Eszter'
         }
+
+    def test_video_search_view_with_invalid_token(self, client: Client, vk_access_token):
+        with mock.patch('requests.get') as mock_resp:
+            mock_resp.return_value = mock.MagicMock(
+                json=lambda: {'error': 'Error occurred.'}
+            )
+            url = '/api/video/search'
+            params = urlencode({
+                'query': 'Eszter',
+                'offset': 1,
+                'access_token': 'op'
+            })
+
+            response = client.get(f'{url}?{params}')
+
+        assert response.status_code == 403

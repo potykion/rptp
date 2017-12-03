@@ -3,6 +3,7 @@ from django.http import HttpRequest
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from rest_framework.decorators import api_view, authentication_classes
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.request import Request
 from rest_framework.response import Response
 
@@ -28,10 +29,14 @@ def video_search_api_view(request: Request):
     query_params_serializer = VideoSearchSerializer(data=request.query_params)
     query_params_serializer.is_valid(raise_exception=True)
 
-    vk_videos = request_vk_videos(
-        request.user.access_token,
-        **query_params_serializer.validated_data
-    )
+    try:
+        vk_videos = request_vk_videos(
+            request.user.access_token,
+            **query_params_serializer.validated_data
+        )
+    except KeyError:
+        raise AuthenticationFailed
+
     vk_videos, offset = filter_adult_videos(
         vk_videos,
         query_params_serializer.validated_data['count'],
@@ -53,6 +58,9 @@ def video_search_api_view(request: Request):
 @login_required(login_url=reverse_lazy('client:auth'))
 def video_search_template_view(request: HttpRequest):
     api_response = video_search_api_view(request)
+
+    if api_response.status_code == 403:
+        return redirect(reverse('client:auth'))
 
     query_missed = lambda: api_response.status_code == 400 and 'query' in api_response.data
     no_videos = lambda: not api_response.data.get('videos', None)

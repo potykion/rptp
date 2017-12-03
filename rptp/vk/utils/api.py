@@ -1,4 +1,5 @@
 import requests
+from rest_framework.exceptions import AuthenticationFailed
 
 from rptp.vk.utils.config import API_VERSION
 
@@ -57,5 +58,9 @@ def request_vk_videos(access_token, query, count, offset):
         **default_params,
         q=query, count=count, offset=offset
     )
-    vk_videos = vk_response['response']['items']
-    return vk_videos
+
+    try:
+        vk_videos = vk_response['response']['items']
+        return vk_videos
+    except KeyError:
+        raise AuthenticationFailed('VK API error: {}'.format(vk_response))

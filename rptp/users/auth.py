@@ -8,10 +8,7 @@ from rptp.users.models import User
 
 class VkAccessTokenAuthenticationBackend:
     def authenticate(self, request, access_token=None, user_id=None, **kwargs):
-        user, _ = User.objects.get_or_create(user_id=user_id)
-        user.access_token = access_token
-        user.save()
-        return user
+        return update_user_token(user_id, access_token)
 
     def get_user(self, user_id):
         try:
@@ -58,7 +55,7 @@ def update_user_token(user_id: int, access_token: str) -> User:
 
     """
     user, _ = User.objects.get_or_create(
-        user_id=user_id,
+        user_id=user_id, username=user_id
     )
     user.access_token = access_token
     user.save()

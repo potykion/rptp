@@ -60,6 +60,7 @@ def video_search_template_view(request: HttpRequest):
     api_response = video_search_api_view(request)
 
     if api_response.status_code == 403:
+        request.session.pop('access_token', None)
         return redirect(reverse('client:auth'))
 
     query_missed = lambda: api_response.status_code == 400 and 'query' in api_response.data

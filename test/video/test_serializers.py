@@ -41,7 +41,9 @@ def test_vk_video_serializer(vk_video):
     assert serializer.validated_data == {
         'title': vk_video['title'],
         'preview': vk_video['photo_320'],
-        'url': 'https://m.vk.com/video{}_{}'.format(vk_video['owner_id'], vk_video['id']),
+        'url': 'https://vk.com/video{}_{}'.format(vk_video['owner_id'], vk_video['id']),
+        'mobile_url': 'https://m.vk.com/video{}_{}'.format(vk_video['owner_id'], vk_video['id']),
+
         'duration': vk_video['duration'],
         'views': vk_video['views']
     }

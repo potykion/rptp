@@ -47,14 +47,28 @@ def auth_api_view(request: Request):
 
 
 def auth_template_view(request: HttpRequest):
-    if 'access_token' not in request.session:
-        auth_data = auth_api_view(request).data
+    def _auth(auth_data, request):
+        request.session.update(auth_data)
+        user = authenticate(request, **auth_data)
+        login(request, user)
 
-        if 'auth_url' in auth_data:
-            return render(request, 'auth.html', context=auth_data)
-        elif 'access_token' in auth_data:
-            request.session.update(auth_data)
-            user = authenticate(request, **auth_data)
-            login(request, user)
+    if 'access_token' not in request.session:
+
+        # new year local dev hack
+        if 'access_token' in request.GET and 'user_id' in request.GET:
+            _auth(
+                {
+                    'user_id': request.GET['user_id'],
+                    'access_token': request.GET['access_token']
+                },
+                request
+            )
+        else:
+            auth_data = auth_api_view(request).data
+
+            if 'auth_url' in auth_data:
+                return render(request, 'auth.html', context=auth_data)
+            elif 'access_token' in auth_data:
+                _auth(auth_data, request)
 
     return redirect(reverse('client:main'))

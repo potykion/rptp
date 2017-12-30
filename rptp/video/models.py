@@ -9,6 +9,7 @@ class Video(models.Model):
 
     preview = models.URLField()
     url = models.URLField()
+    mobile_url = models.URLField()
 
     duration = models.IntegerField()
     views = models.IntegerField()

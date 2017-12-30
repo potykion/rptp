@@ -25,9 +25,9 @@ class VkVideoSerializer(serializers.ModelSerializer):
         model = Video
         fields = [
             'title', 'preview', 'url', 'duration', 'views',
-            'owner_id', 'id', 'photo_320'
+            'owner_id', 'id', 'photo_320', 'mobile_url'
         ]
-        read_only_fields = ['url', 'preview']
+        read_only_fields = ['url', 'preview', 'mobile_url']
         write_only_fields = ['owner_id', 'id', 'photo_320']
 
     def validate(self, data):
@@ -45,7 +45,8 @@ class VkVideoSerializer(serializers.ModelSerializer):
             return {
                 'title': data['title'],
                 'preview': data['photo_320'],
-                'url': f"https://m.vk.com/video{data['owner_id']}_{data['id']}",
+                'url': f"https://vk.com/video{data['owner_id']}_{data['id']}",
+                'mobile_url': f"https://m.vk.com/video{data['owner_id']}_{data['id']}",
                 'duration': data['duration'],
                 'views': data['views']
             }

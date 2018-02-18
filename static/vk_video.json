@@ -1,0 +1,23 @@
+{
+  "id": 456239209,
+  "owner_id": -81447889,
+  "title": "Sasha",
+  "duration": 1372,
+  "description": "Nice video",
+  "date": 1464152961,
+  "comments": 63,
+  "views": 985775,
+  "width": 1280,
+  "height": 720,
+  "photo_130": "https://pp.userapi.com/c627623/v627623889/49c76/JSzO-UpD4bM.jpg",
+  "photo_320": "https://pp.userapi.com/c627623/v627623889/49c74/1f_JKV_2jBE.jpg",
+  "photo_800": "https://pp.userapi.com/c627623/v627623889/49c73/doEijcRVPpM.jpg",
+  "files": {
+    "mp4_240": "https://cs1-59v4.vkuservideo.net/p3/5262d3320390.240.mp4?extra=rRaKBp0tZ07LY1sNBYEcCaboM7gLUoYpbhatPQ_4Z0PzkgKWYzB3TJuZGfcA25qyDTm-kgWCj4FQBOgYwf7eKs_KUuYH7UKrgWdH66iPAEDncBiZ4YKLvrgiBHkCh15PWWbQKE-ygg",
+    "mp4_360": "https://cs1-81v4.vkuservideo.net/p20/5262d3320390.360.mp4?extra=ATIQKqhveekIKJpHfJ51OCgkSFGYis8sN90y6Chw-rw1zxD7DgtKWdsoaKG8Ngobd_FT5mFrIoUOXnryVi0CgYG-QxtLBnfsYONRrgDgu0auZNNgYr7mpJEt_JQLhqJpiWKFdM7NHQ",
+    "mp4_480": "https://cs1-75v4.vkuservideo.net/p3/5262d3320390.480.mp4?extra=rRaKBp0tZ07LY1sNBYEcCaboM7gLUoYpbhatPQ_4Z0PzkgKWYzB3TJuZGfcA25qyDTm-kgWCj4FQBOgYwf7eKs_KUuYH7UKrgWdH66iPAEDncBiZ4YKLvrgiBHkCh15PWWbQKE-ygg",
+    "mp4_720": "https://cs1-43v4.vkuservideo.net/p4/5262d3320390.720.mp4?extra=cAnBTZynFfc9XDC-xUqihQW-mvbgJiBcencVauSyhymHd1EYheWb4YuIDTK5ZewAtN5Zn8oNE6lNv_LVhfHaX21WYW7nopoWZv-qML6YfjYFAmd2NLaET_ugzHFf19MXNziFT-a2XQ"
+  },
+  "player": "https://vk.com/video_ext.php?oid=-81447889&id=456239209&hash=b9da49bd273ec941&__ref=vk.api&api_hash=151899237661c2957f1f932a47aa_GE3DEMZRGMYDS",
+  "can_add": 0
+}

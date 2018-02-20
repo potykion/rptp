@@ -2,31 +2,32 @@
 <html>
 <head>
     <title>RPTP</title>
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:300" rel="stylesheet">
 
-    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 
     <style type="text/css">
         .primary-color {
-            background-color: #FFE3F5;
+            background-color: #ffedf8;
         }
 
         .primary-font {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Fira Sans', sans-serif;
             font-size: 24px;
         }
 
         .small-font {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Fira Sans', sans-serif;
             font-size: 16px;
         }
 
         .solid-border {
-            border: 2px solid black;
+            border: 2px solid #231F20;
         }
 
         body {
             margin: 0;
+            background-color: #FCFCFC;
         }
 
         .navbar {
@@ -65,7 +66,7 @@
         }
 
         .form {
-            margin: 15px 10px;
+            margin: 15px 8px;
         }
 
         .big-btn {
@@ -97,7 +98,8 @@
         .video-container {
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-evenly;
+            justify-content: space-between;
+            margin: 0 3px;
         }
 
         .video-container > div {
@@ -106,10 +108,12 @@
 
         .video-controls {
             padding: 10px;
+            background-color: white;
         }
 
         .duration {
             padding: 5px;
+            font-weight: bold;
 
         }
 
@@ -179,7 +183,7 @@
                 </a>
 
                 <div class="video-controls left-right-container ">
-                    <div class="duration solid-border small-font">
+                    <div class="duration small-font">
                         <i class="fa fa-clock"></i>
                         {{ video.duration }}
                     </div>

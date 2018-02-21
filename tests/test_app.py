@@ -10,7 +10,7 @@ from rptp.config import BASE_DIR
 
 @pytest.fixture()
 async def vk_video_response():
-    path = os.path.join(BASE_DIR, 'static', 'vk_videos_response.json')
+    path = os.path.join(BASE_DIR, 'static', 'json', 'vk_videos_response.json')
     with open(path) as f:
         return json.load(f)
 

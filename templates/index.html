@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block custom_css %}
+    <style type="text/css">
+        .center-text {
+            text-align: center;
+        }
+
+        .big-font {
+            font-size: 36px;
+        }
+    </style>
+{% endblock custom_css %}
+
+{% block container %}
+    <div class="center-text">
+        <p class="big-font">Welcome to RPTP</p>
+        <p class="primary-font">RPTP is a service for watching adult VK videos among 4000 pornstars.</p>
+        <p class="primary-font">To start watching just login via VK.</p>
+
+        <button class="refresh-btn big-btn primary-font primary-color solid-border">
+            <i class="fab fa-vk"></i>
+            Login
+        </button>
+
+    </div>
+
+{% endblock container %}

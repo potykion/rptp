@@ -1,172 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>RPTP</title>
-    <link href="https://fonts.googleapis.com/css?family=Fira+Sans:300" rel="stylesheet">
+{% extends "base.html" %}
 
-    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-
-    <style type="text/css">
-        .primary-color {
-            background-color: #ffedf8;
-        }
-
-        .primary-font {
-            font-family: 'Fira Sans', sans-serif;
-            font-size: 24px;
-        }
-
-        .small-font {
-            font-family: 'Fira Sans', sans-serif;
-            font-size: 16px;
-        }
-
-        .solid-border {
-            border: 2px solid #231F20;
-        }
-
-        body {
-            margin: 0;
-            background-color: #FCFCFC;
-        }
-
-        .navbar {
-            border-left: 0;
-            border-right: 0;
-            border-top: 0;
-        }
-
-        .navbar ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-        }
-
-        .navbar li {
-            float: left;
-        }
-
-        .navbar a {
-            display: block;
-            text-align: center;
-            padding: 15px;
-        }
-
-        .container {
-            margin: auto;
-            max-width: 1000px;
-        }
-
-        .left-right-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-        }
-
-        .form {
-            margin: 15px 8px;
-        }
-
-        .big-btn {
-            width: 150px;
-            height: 50px;
-        }
-
-        .big-btn:hover {
-            background-color: #ffb6ca;
-            cursor: pointer;
-
-        }
-
-        .search-wrapper {
-            display: flex;
-        }
-
-        .search-input {
-            width: 450px;
-            box-sizing: border-box;
-            height: 50px;
-            padding: 0 20px;
-        }
-
-        .search-btn {
-            border-left: 0;
-        }
-
-        .video-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            margin: 0 3px;
-        }
-
-        .video-container > div {
-            margin: 5px;
-        }
-
-        .video-controls {
-            padding: 10px;
-            background-color: white;
-        }
-
-        .duration {
-            padding: 5px;
-            font-weight: bold;
-
-        }
-
-        .video-item {
-            max-width: 297px;
-        }
-
-        .video-buttons {
-            display: flex;
-            justify-content: right;
-        }
-
-        .vk-btn {
-            border-right: 0;
-        }
-
-        .btn-small {
-            color: black;
-            display: inline-block;
-            padding: 5px;
-            width: 40px;
-            text-align: center;
-        }
-
-        .btn-small:hover {
-            background-color: #ffb6ca;
-            cursor: pointer;
-        }
-
-        .link-image {
-            border-bottom: 2px solid black;
-            display: block;
-            width: 100%;
-        }
-
-    </style>
-</head>
-<body>
-<div class="navbar solid-border primary-color primary-font">
-    <ul>
-        <li><a>RPTP</a></li>
-    </ul>
-</div>
-
-<div class="container">
+{% block container %}
     <div class="form left-right-container">
-            <form class="search-wrapper">
-                <input class="search-input primary-font solid-border" type="text" name="query" value="{{ query }}">
-                <button class="search-btn big-btn primary-font primary-color solid-border">
-                    <i class="fa fa-search"></i>
-                    Search
-                </button>
-            </form>
+        <form class="search-wrapper">
+            <input class="search-input primary-font solid-border"
+                   type="text" name="query" value="{{ query|capitalize }}">
+            <button class="search-btn big-btn primary-font primary-color solid-border">
+                <i class="fa fa-search"></i>
+                Search
+            </button>
+        </form>
 
 
         <button class="refresh-btn big-btn primary-font primary-color solid-border">
@@ -174,7 +17,6 @@
             Refresh
         </button>
     </div>
-
     <div class="video-container">
         {% for video in videos %}
             <div class="video-item solid-border">
@@ -201,9 +43,4 @@
 
         {% endfor %}
     </div>
-
-</div>
-
-
-</body>
-</html>
+{% endblock %}

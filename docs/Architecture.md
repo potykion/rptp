@@ -1,6 +1,6 @@
 # Info 
 
-Only use cases, diagrams can be found in Figma.
+Only use cases, diagrams can be found in Draw.io, mockups are in Figma.
 
 # Use cases
 
@@ -8,6 +8,12 @@ Only use cases, diagrams can be found in Figma.
 2. Find videos
 
 # Auth via VK
+
+1. Click on auth-button
+2. Redirect to VK (+ fill VK form)
+3. Get token from vk
+4. Put token to session
+5. Redirect to videos page
 
 # Find videos 
 

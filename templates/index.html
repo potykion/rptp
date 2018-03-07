@@ -9,19 +9,33 @@
         .big-font {
             font-size: 36px;
         }
+
+        .login-btn {
+            text-decoration: none;
+            color: #231F20;
+            padding: 9px 0;
+            text-align: center;
+            display: inline-block;
+            width: 146px;
+        }
+
+        .login-btn:hover {
+            background-color: #FFCAD4;
+            cursor: pointer;
+        }
+
     </style>
 {% endblock custom_css %}
 
 {% block container %}
     <div class="center-text">
         <p class="big-font">Welcome to RPTP</p>
-        <p class="primary-font">RPTP is a service for watching adult VK videos among 4000 pornstars.</p>
+        <p class="primary-font">RPTP is a service for watching random adult videos from VK.</p>
         <p class="primary-font">To start watching just login via VK.</p>
-
-        <button class="refresh-btn big-btn primary-font primary-color solid-border">
+        <a class="login-btn primary-font primary-color solid-border" href="{{ auth_link }}">
             <i class="fab fa-vk"></i>
             Login
-        </button>
+        </a>
 
     </div>
 

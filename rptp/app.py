@@ -42,27 +42,29 @@ async def videos_template_view(request):
     return response.html(rendered)
 
 
+@app.route('/')
 @app.route('/index')
 async def index_template_view(request):
     template = jinja_env.get_template('index.html')
-    context = {}
 
     code = request.args.get('code')
-    authorizer = VKAuthorizer()
-
     if code:
+        authorizer = VKAuthorizer()
         user_id, token = await authorizer.auth(code)
-        rendered = await template.render_async(**context)
+
+        rendered = await template.render_async()
         response_ = response.html(rendered)
+
         response_ = save_token_data(response_, user_id, token)
-        return response_
     elif has_token(request):
-        rendered = await template.render_async(**context)
+        rendered = await template.render_async()
         response_ = response.html(rendered)
-        return response_
     else:
+        authorizer = VKAuthorizer()
         auth_link = authorizer.generate_auth_link()
-        context.update({'auth_link': auth_link})
+        context = {'auth_link': auth_link}
+
         rendered = await template.render_async(**context)
         response_ = response.html(rendered)
-        return response_
+
+    return response_

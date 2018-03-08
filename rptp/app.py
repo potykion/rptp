@@ -3,9 +3,10 @@ import json
 from sanic import Sanic, response
 from sanic_jinja2 import SanicJinja2
 
+from rptp.auth import VKAuthorizer
 from rptp.config import TEMPLATES_DIR
+from rptp.cookie import save_token_data
 from rptp.getters import get_videos
-from rptp import vk_api
 
 app = Sanic(__name__)
 app.static('/static', './static')
@@ -42,17 +43,15 @@ async def index_template_view(request):
     context = {}
 
     code = request.args.get('code')
+    authorizer = VKAuthorizer()
 
     if code:
-        token_data = await vk_api.request_token_data(code)
-        # response_ = response.redirect('/videos')
+        user_id, token = await authorizer.auth(code)
         response_ = response.text('oppa')
-        response_.cookies['access_token'] = token_data['access_token']
-        response_.cookies['user_id'] = str(token_data['user_id'])
+        response_ = save_token_data(response_, user_id, token)
         return response_
     else:
-
-        auth_link = vk_api.generate_auth_link()
+        auth_link = authorizer.generate_auth_link()
         context.update({'auth_link': auth_link})
 
         return jinja.render(template, request, **context)

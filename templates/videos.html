@@ -4,17 +4,16 @@
     <div class="form left-right-container">
         <form class="search-wrapper">
             <input class="search-input primary-font solid-border"
-                   type="text" name="query" value="{{ query|capitalize }}">
-            <button class="search-btn big-btn primary-font primary-color solid-border">
+                   type="text" name="query" value="{{ query|capitalize }}" required>
+            <button class="search-btn big-button primary-font primary-color solid-border">
                 <i class="fa fa-search"></i>
                 Search
             </button>
         </form>
 
-
-        <button class="refresh-btn big-btn primary-font primary-color solid-border">
+        <button class="refresh-btn big-button primary-font primary-color solid-border">
             <i class="fa fa-sync"></i>
-            Refresh
+            Pick random
         </button>
     </div>
     <div class="video-container">

@@ -1,16 +1,20 @@
 import json
 
+from jinja2 import Environment, select_autoescape, FileSystemLoader
 from sanic import Sanic, response
-from sanic_jinja2 import SanicJinja2
 
 from rptp.auth import VKAuthorizer
 from rptp.config import TEMPLATES_DIR
-from rptp.cookie import save_token_data
+from rptp.cookie import save_token_data, has_token
 from rptp.getters import get_videos
 
 app = Sanic(__name__)
 app.static('/static', './static')
-jinja = SanicJinja2(app, pkg_path=TEMPLATES_DIR)
+jinja_env = Environment(
+    loader=FileSystemLoader(TEMPLATES_DIR),
+    autoescape=select_autoescape(['html', 'xml']),
+    enable_async=True
+)
 
 
 @app.route('/api/videos')
@@ -25,7 +29,7 @@ async def video_api_view(request):
 
 @app.route('/videos')
 async def videos_template_view(request):
-    template = 'videos.html'
+    template = jinja_env.get_template('videos.html')
 
     query = request.args.get('query')
 
@@ -34,12 +38,13 @@ async def videos_template_view(request):
 
     context = {'query': query, 'videos': videos}
 
-    return jinja.render(template, request, **context)
+    rendered = await template.render_async(**context)
+    return response.html(rendered)
 
 
 @app.route('/index')
 async def index_template_view(request):
-    template = 'index.html'
+    template = jinja_env.get_template('index.html')
     context = {}
 
     code = request.args.get('code')
@@ -47,11 +52,17 @@ async def index_template_view(request):
 
     if code:
         user_id, token = await authorizer.auth(code)
-        response_ = response.text('oppa')
+        rendered = await template.render_async(**context)
+        response_ = response.html(rendered)
         response_ = save_token_data(response_, user_id, token)
+        return response_
+    elif has_token(request):
+        rendered = await template.render_async(**context)
+        response_ = response.html(rendered)
         return response_
     else:
         auth_link = authorizer.generate_auth_link()
         context.update({'auth_link': auth_link})
-
-        return jinja.render(template, request, **context)
+        rendered = await template.render_async(**context)
+        response_ = response.html(rendered)
+        return response_

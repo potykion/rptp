@@ -24,6 +24,10 @@
             cursor: pointer;
         }
 
+        .center-form {
+            justify-content: center;
+        }
+
     </style>
 {% endblock custom_css %}
 
@@ -31,11 +35,29 @@
     <div class="center-text">
         <p class="big-font">Welcome to RPTP</p>
         <p class="primary-font">RPTP is a service for watching random adult videos from VK.</p>
-        <p class="primary-font">To start watching just login via VK.</p>
-        <a class="login-btn primary-font primary-color solid-border" href="{{ auth_link }}">
-            <i class="fab fa-vk"></i>
-            Login
-        </a>
+
+        {% if auth_link %}
+            <p class="primary-font">To start watching just login via VK.</p>
+            <a class="login-btn primary-font primary-color solid-border" href="{{ auth_link }}">
+                <i class="fab fa-vk"></i>
+                Login
+            </a>
+        {% else %}
+            <p class="big-font">Enter query</p>
+            <form class="search-wrapper center-form ">
+                <input class="search-input primary-font solid-border"
+                       type="text" name="query" value="{{ query|capitalize }}" required>
+                <button class="search-btn  big-button primary-font primary-color solid-border">
+                    <i class="fa fa-search"></i>
+                    Search
+                </button>
+            </form>
+
+            <p class="big-font">OR</p>
+            <button class="big-button primary-font solid-border primary-color">
+                <i class="fa fa-sync"></i> Pick random
+            </button>
+        {% endif %}
 
     </div>
 

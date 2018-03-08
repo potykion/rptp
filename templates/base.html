@@ -2,12 +2,164 @@
 <html>
 <head>
     <title>RPTP</title>
+
+
     <link href="https://fonts.googleapis.com/css?family=Fira+Sans:300" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="../static/css/base.css">
+
+    <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
+
+    <style>
+
+        .primary-color {
+            background-color: #ffedf8;
+        }
+
+        .primary-font {
+            font-family: 'Fira Sans', sans-serif;
+            font-size: 24px;
+        }
+
+        .small-font {
+            font-family: 'Fira Sans', sans-serif;
+            font-size: 16px;
+        }
+
+        .solid-border {
+            border: 2px solid #231F20;
+        }
+
+        body {
+            margin: 0;
+            background-color: #FCFCFC;
+            font-family: 'Fira Sans', sans-serif;
+
+        }
+
+        .navbar {
+            border-left: 0;
+            border-right: 0;
+            border-top: 0;
+        }
+
+        .navbar ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .navbar li {
+            float: left;
+        }
+
+        .navbar a {
+            display: block;
+            text-align: center;
+            padding: 15px;
+        }
+
+        .container {
+            margin: auto;
+            max-width: 1000px;
+        }
+
+        .left-right-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+        }
+
+        .form {
+            margin: 15px 5px;
+        }
+
+        .big-button {
+            height: 50px;
+            display: inline-block;
+
+            color: black;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .big-button:hover {
+            background-color: #FFCAD4;
+            cursor: pointer;
+        }
+
+        .search-wrapper {
+            display: flex;
+        }
+
+        .search-input {
+            width: 450px;
+            box-sizing: border-box;
+            height: 50px;
+            padding: 0 10px;
+        }
+
+        .search-btn {
+            border-left: 0;
+        }
+
+        .video-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .video-container > div {
+            margin: 5px;
+        }
+
+        .video-controls {
+            padding: 10px;
+            background-color: white;
+        }
+
+        .duration {
+            padding: 5px;
+            font-weight: bold;
+
+        }
+
+        .video-item {
+            max-width: 297px;
+        }
+
+        .video-buttons {
+            display: flex;
+            justify-content: right;
+        }
+
+        .vk-btn {
+            border-right: 0;
+        }
+
+        .btn-small {
+            color: black;
+            display: inline-block;
+            padding: 5px;
+            width: 40px;
+            text-align: center;
+        }
+
+        .btn-small:hover {
+            background-color: #ffb6ca;
+            cursor: pointer;
+        }
+
+        .link-image {
+            border-bottom: 2px solid black;
+            display: block;
+            width: 100%;
+        }
+
+
+    </style>
 
     {% block custom_css %}{% endblock %}
-
-    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 </head>
 <body>
 <div class="navbar solid-border primary-color primary-font">

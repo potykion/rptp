@@ -14,7 +14,6 @@ pluggy==0.6.0
 py==1.5.2
 pytest==3.4.0
 sanic==0.7.0
-sanic-jinja2==0.7.0
 six==1.11.0
 websockets==4.0.1
 yarl==1.1.1

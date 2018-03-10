@@ -1,4 +1,5 @@
 from rptp import vk_api
+from rptp.cookie import get_token
 
 
 class VKAuthorizer:
@@ -8,3 +9,9 @@ class VKAuthorizer:
 
     def generate_auth_link(self):
         return vk_api.generate_auth_link()
+
+
+def extract_auth_data(request):
+    return request.headers.get('authorization') or \
+           request.args.get('token') or \
+           get_token(request)

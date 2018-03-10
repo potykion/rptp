@@ -3,6 +3,7 @@ import os
 # OS SETTINGS
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
 
 # VK SETTINGS
 AUTH_REDIRECT_URI = os.environ.get(

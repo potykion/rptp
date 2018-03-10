@@ -3,13 +3,15 @@ import json
 from jinja2 import Environment, select_autoescape, FileSystemLoader
 from sanic import Sanic, response
 
-from rptp.auth import VKAuthorizer
-from rptp.config import TEMPLATES_DIR
-from rptp.cookie import save_token_data, has_token
+from rptp.auth import VKAuthorizer, extract_auth_data
+from rptp.config import TEMPLATES_DIR, STATIC_DIR
+from rptp.cookie import save_token_data, get_token
+from rptp.decorators import browser_authorization_required
 from rptp.getters import get_videos
 
 app = Sanic(__name__)
-app.static('/static', './static')
+app.static('/static', STATIC_DIR)
+
 jinja_env = Environment(
     loader=FileSystemLoader(TEMPLATES_DIR),
     autoescape=select_autoescape(['html', 'xml']),
@@ -20,7 +22,7 @@ jinja_env = Environment(
 @app.route('/api/videos')
 async def video_api_view(request):
     query = request.args.get('query')
-    token = request.headers.get('authorization') or request.args.get('token')
+    token = extract_auth_data(request)
 
     videos = await get_videos(query, token)
 
@@ -28,6 +30,7 @@ async def video_api_view(request):
 
 
 @app.route('/videos')
+@browser_authorization_required()
 async def videos_template_view(request):
     template = jinja_env.get_template('videos.html')
 
@@ -50,13 +53,13 @@ async def index_template_view(request):
     code = request.args.get('code')
     if code:
         authorizer = VKAuthorizer()
-        user_id, token = await authorizer.auth(code)
+        user_id, access_token = await authorizer.auth(code)
 
         rendered = await template.render_async()
         response_ = response.html(rendered)
 
-        response_ = save_token_data(response_, user_id, token)
-    elif has_token(request):
+        response_ = save_token_data(response_, access_token, user_id)
+    elif get_token(request):
         rendered = await template.render_async()
         response_ = response.html(rendered)
     else:

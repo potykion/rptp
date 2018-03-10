@@ -1,5 +1,29 @@
 {% extends "base.html" %}
 
+{% block custom_css %}
+    <style type="text/css">
+        .video-item {
+            max-width: 297px;
+        }
+
+        .video-container > div {
+            margin: 5px;
+        }
+
+        .video-controls {
+            padding: 10px;
+            background-color: white;
+            float: right;
+        }
+
+        .video-buttons > * {
+            margin: 0 5px;
+        }
+
+
+    </style>
+{% endblock %}
+
 {% block container %}
     <div class="form left-right-container">
         <form class="search-wrapper">
@@ -23,18 +47,15 @@
                     <img class="link-image" src="{{ video.preview }}">
                 </a>
 
-                <div class="video-controls left-right-container ">
-                    <div class="duration small-font">
-                        <i class="fa fa-clock"></i>
-                        {{ video.duration }}
-                    </div>
-
+                <div class="video-controls ">
                     <div class="video-buttons">
                         <a class="vk-btn btn-small small-font primary-color solid-border" href="{{ video.url }}">
                             <i class="fab fa-vk"></i>
+                            Full
                         </a>
                         <a class="btn-small small-font primary-color solid-border" href="{{ video.mobile_url }}">
                             <i class="fa fa-mobile-alt"></i>
+                            Mobile
                         </a>
                     </div>
                 </div>

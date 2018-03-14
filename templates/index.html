@@ -10,19 +10,9 @@
             font-size: 36px;
         }
 
-        .login-btn {
-            text-decoration: none;
-            color: #231F20;
-            padding: 9px 0;
-            text-align: center;
-            display: inline-block;
-            width: 146px;
-        }
 
-        .login-btn:hover {
-            background-color: #FFCAD4;
-            cursor: pointer;
-        }
+
+
 
         .center-form {
             justify-content: center;
@@ -38,13 +28,13 @@
 
         {% if auth_link %}
             <p class="primary-font">To start watching just login via VK.</p>
-            <a class="login-btn primary-font primary-color solid-border" href="{{ auth_link }}">
+            <a class="link-btn primary-font primary-color solid-border" href="{{ auth_link }}">
                 <i class="fab fa-vk"></i>
                 Login
             </a>
         {% else %}
             <p class="big-font">Enter query</p>
-            <form class="search-wrapper center-form ">
+            <form class="search-wrapper center-form " action="/videos">
                 <input class="search-input primary-font solid-border"
                        type="text" name="query" value="{{ query|capitalize }}" required>
                 <button class="search-btn  big-button primary-font primary-color solid-border">
@@ -54,9 +44,9 @@
             </form>
 
             <p class="big-font">OR</p>
-            <button class="big-button primary-font solid-border primary-color">
+            <a class="link-btn big-button primary-font solid-border primary-color">
                 <i class="fa fa-sync"></i> Pick random
-            </button>
+            </a>
         {% endif %}
 
     </div>

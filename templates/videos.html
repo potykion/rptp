@@ -3,6 +3,8 @@
 {% block custom_css %}
     <style type="text/css">
         .video-item {
+            background-color: white;
+
             max-width: 297px;
         }
 
@@ -12,7 +14,6 @@
 
         .video-controls {
             padding: 10px;
-            background-color: white;
             float: right;
         }
 
@@ -35,10 +36,9 @@
             </button>
         </form>
 
-        <button class="refresh-btn big-button primary-font primary-color solid-border">
-            <i class="fa fa-sync"></i>
-            Pick random
-        </button>
+        <a class="link-btn big-button primary-font solid-border primary-color">
+            <i class="fa fa-sync"></i> Pick random
+        </a>
     </div>
     <div class="video-container">
         {% for video in videos %}

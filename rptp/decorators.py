@@ -26,3 +26,21 @@ def browser_authorization_required():
         return decorated_function
 
     return decorator
+
+
+def required_query_params(params):
+    """
+    Check {params} exist in query parameters, redirect to index if any parameter is not present.
+    """
+
+    def decorator(f):
+        @wraps(f)
+        async def decorated_function(request, *args, **kwargs):
+            if any(parameter not in request.args for parameter in params):
+                return redirect('/index')
+
+            return await f(request, *args, **kwargs)
+
+        return decorated_function
+
+    return decorator

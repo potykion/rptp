@@ -5,7 +5,6 @@ from sanic import Sanic, response
 
 from rptp.auth import VKAuthorizer, extract_auth_data
 from rptp.config import TEMPLATES_DIR, STATIC_DIR
-from rptp.cookie import save_token_data, get_token
 from rptp.decorators import browser_authorization_required
 from rptp.getters import get_videos
 
@@ -52,14 +51,14 @@ async def index_template_view(request):
 
     code = request.args.get('code')
     if code:
-        authorizer = VKAuthorizer()
-        user_id, access_token = await authorizer.auth(code)
-
         rendered = await template.render_async()
         response_ = response.html(rendered)
 
-        response_ = save_token_data(response_, access_token, user_id)
-    elif get_token(request):
+        authorizer = VKAuthorizer()
+        response_ = await authorizer.authorize_response(response_, code)
+
+        return response_
+    elif extract_auth_data(request):
         rendered = await template.render_async()
         response_ = response.html(rendered)
     else:

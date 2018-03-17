@@ -7,6 +7,8 @@ import pytest
 
 from rptp.app import app
 from rptp.config import BASE_DIR
+from rptp.models import get_sync_client, upload_actresses
+from rptp.scrap import parse_debut_page
 
 
 @pytest.fixture()
@@ -21,6 +23,7 @@ async def vk_videos():
     path = os.path.join(BASE_DIR, 'static', 'json', 'vk_videos_response.json')
     with open(path) as f:
         return json.load(f)['response']['items']
+
 
 @pytest.fixture()
 async def vk_token_response():
@@ -39,6 +42,20 @@ def vk_token():
 @pytest.fixture()
 def vk_user():
     return 16231309
+
+
+@pytest.fixture()
+def test_db():
+    db_name = 'test'
+    yield db_name
+    client = get_sync_client()
+    client.drop_database(db_name)
+
+
+@pytest.fixture()
+def actresses(test_db):
+    parsed_actresses = list(parse_debut_page([2015]))
+    upload_actresses(parsed_actresses, test_db)
 
 
 def test_video_api_view(vk_videos):
@@ -76,7 +93,6 @@ def test_auth_template_view_with_code(vk_token_response, vk_token, vk_videos):
 
     with mock.patch('rptp.vk_api.request_token_data', return_value=vk_token_response):
         with mock.patch('rptp.vk_api.request_videos', return_value=vk_videos):
-
             request, response = app.test_client.get(
                 '/index', params={'code': code}
             )
@@ -85,3 +101,13 @@ def test_auth_template_view_with_code(vk_token_response, vk_token, vk_videos):
     response_cookies = SimpleCookie()
     response_cookies.load(response.headers.get('Set-Cookie', {}))
     assert response_cookies['access_token'].value == vk_token
+
+
+def test_pick_random_api_view(actresses):
+    """
+    Given actresses,
+    When make request to pick_random_api_view,
+    Then response contains random actress.
+    """
+    request, response = app.test_client.get('/api/pick_random')
+    assert set(response.json.keys()) == {'name', 'debut_year', 'link'}

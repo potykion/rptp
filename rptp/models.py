@@ -1,34 +1,46 @@
-import os
-
-from pymongo import MongoClient
-
-MONGO_URL = os.environ['MONGO_URL']
-DEFAULT_DB = 'rptp'
+from rptp.config import MONGO_DB, MONGO_URL
 
 
-class ActressManager:
-    def __init__(self, db_name=None):
-        db = _get_db(db_name or DEFAULT_DB)
+def upload_actresses(actresses_to_upload, db_name=None):
+    db = get_db(db_name)
+    db.actresses.insert_many(actresses_to_upload)
+
+
+class AsyncActressManager:
+    def __init__(self, db):
         self.actresses = db.actresses
 
-    def upload_actresses(self, actresses_to_upload):
-        self.actresses.insert_many(actresses_to_upload)
+    async def find(self, name):
+        return await self.actresses.find_one({'name': name})
 
-    def find_actress(self, name, with_id=False):
-        actress = self.actresses.find({'name': name}).next()
+    async def pick_random(self, with_id=True):
+        actresses = await self.actresses.aggregate(
+            [{'$sample': {'size': 1}}]
+        ).to_list(1)
+        actress = actresses[0]
 
         if not with_id:
             actress.pop('_id')
 
         return actress
 
-
-def _get_db(db_name):
-    client = _get_client()
-    db = client[db_name]
-    return db
+    async def count(self):
+        return await self.actresses.count()
 
 
-def _get_client():
-    client = MongoClient(MONGO_URL)
-    return client
+def get_db(db_name=None, client=None):
+    db_name = db_name or MONGO_DB
+    client = client or get_sync_client()
+    return client[db_name]
+
+
+def get_sync_client():
+    from pymongo import MongoClient
+
+    return MongoClient(MONGO_URL)
+
+
+def get_async_client():
+    from motor.motor_asyncio import AsyncIOMotorClient
+
+    return AsyncIOMotorClient(MONGO_URL)

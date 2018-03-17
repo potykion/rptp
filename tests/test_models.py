@@ -1,6 +1,6 @@
 import pytest
 
-from rptp.models import ActressManager, _get_client
+from rptp.models import get_sync_client, upload_actresses, get_async_client, AsyncActressManager
 from rptp.scrap import parse_debut_page
 
 
@@ -8,16 +8,18 @@ from rptp.scrap import parse_debut_page
 def test_db():
     db_name = 'test'
     yield db_name
-    client = _get_client()
+    client = get_sync_client()
     client.drop_database(db_name)
 
 
 @pytest.fixture()
-def manager(test_db):
-    return ActressManager(test_db)
+def async_actress_manager(test_db):
+    client = get_async_client()
+    db = client[test_db]
+    return AsyncActressManager(db)
 
 
-def test_upload_actresses(manager):
+async def test_upload_actresses(test_db, async_actress_manager):
     """
     Given parsed actresses,
     When insert them to actress collection,
@@ -27,11 +29,13 @@ def test_upload_actresses(manager):
 
     parsed_actresses = list(parse_debut_page([2015]))
 
-    manager.upload_actresses(parsed_actresses)
+    upload_actresses(parsed_actresses, test_db)
 
-    assert len(parsed_actresses) == manager.actresses.count()
+    assert len(parsed_actresses) == await async_actress_manager.count()
 
-    miss_blackberry = manager.find_actress('Miss Blackberry')
+    miss_blackberry = 'Miss Blackberry'
+    miss_blackberry = await async_actress_manager.find(miss_blackberry)
+    miss_blackberry.pop('_id', None)
     assert miss_blackberry == {
         'link': 'http://www.pornteengirl.com/model/miss-blackberry.html',
         'debut_year': 2015,

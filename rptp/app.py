@@ -4,7 +4,7 @@ from jinja2 import Environment, select_autoescape, FileSystemLoader
 from sanic import Sanic, response
 
 from rptp.auth import VKResponseAuthorizer, extract_auth_data
-from rptp.config import TEMPLATES_DIR, STATIC_DIR
+from rptp.config import TEMPLATES_DIR, STATIC_DIR, MONGO_DB
 from rptp.decorators import browser_authorization_required, required_query_params
 from rptp.getters import get_videos
 
@@ -18,6 +18,15 @@ jinja_env = Environment(
 )
 
 
+@app.listener('before_server_start')
+def init(sanic, loop):
+    global actress_manager
+    from rptp.models import AsyncActressManager, get_async_client, get_db
+    client = get_async_client()
+    db = get_db(MONGO_DB, client)
+    actress_manager = AsyncActressManager(db)
+
+
 @app.route('/api/videos')
 async def video_api_view(request):
     query = request.args.get('query')
@@ -26,6 +35,12 @@ async def video_api_view(request):
     videos = await get_videos(query, token)
 
     return response.json(videos)
+
+
+@app.route('/api/pick_random')
+async def pick_random_api_view(request):
+    actress = await actress_manager.pick_random(with_id=False)
+    return response.json(actress)
 
 
 @app.route('/videos')

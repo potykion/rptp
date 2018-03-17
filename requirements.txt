@@ -20,6 +20,7 @@ parse==1.8.2
 pluggy==0.6.0
 py==1.5.2
 pyee==5.0.0
+pymongo==3.6.1
 pyppeteer==0.0.14
 pyquery==1.4.0
 pytest==3.4.0

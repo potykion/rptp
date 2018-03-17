@@ -25,6 +25,22 @@
     </style>
 {% endblock %}
 
+{% block custom_jss %}
+    <script>
+        $('#pick-random').click(function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                url: '/api/pick_random'
+            })
+                .done(function (data) {
+                    window.location = '/videos?query=' + data.name;
+                });
+
+        })
+    </script>
+{% endblock %}
+
 {% block container %}
     <div class="form left-right-container">
         <form class="search-wrapper">
@@ -36,7 +52,7 @@
             </button>
         </form>
 
-        <a class="link-btn big-button primary-font solid-border primary-color">
+        <a id="pick-random" class="link-btn big-button primary-font solid-border primary-color">
             <i class="fa fa-sync"></i> Pick random
         </a>
     </div>

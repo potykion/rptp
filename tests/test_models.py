@@ -1,7 +1,11 @@
+import json
+import os
+
 import pytest
 
+from rptp.config import STATIC_DIR
 from rptp.models import get_sync_client, upload_actresses, get_async_client, AsyncActressManager
-from rptp.scrap import parse_debut_page
+from tests.fixtures import ActressFixtures
 
 
 @pytest.fixture()
@@ -13,31 +17,28 @@ def test_db():
 
 
 @pytest.fixture()
-def async_actress_manager(test_db):
-    client = get_async_client()
-    db = client[test_db]
-    return AsyncActressManager(db)
+def actresses(test_db):
+    with open(os.path.join(STATIC_DIR, 'json', 'actresses.json')) as f:
+        actresses_to_upload = json.load(f)
+        upload_actresses(actresses_to_upload, test_db)
 
 
-async def test_upload_actresses(test_db, async_actress_manager):
-    """
-    Given parsed actresses,
-    When insert them to actress collection,
-    Then actress collection contains parsed actresses,
-    And Miss Blackberry too.
-    """
+class TestModels(ActressFixtures):
+    async def test_upload_actresses(self, test_db, actresses, async_actress_manager):
+        """
+        Given parsed actresses,
+        When insert them to actress collection,
+        Then actress collection contains parsed actresses,
+        And Miss Blackberry too.
+        """
 
-    parsed_actresses = list(parse_debut_page([2015]))
+        assert len(actresses) == await async_actress_manager.count()
 
-    upload_actresses(parsed_actresses, test_db)
-
-    assert len(parsed_actresses) == await async_actress_manager.count()
-
-    miss_blackberry = 'Miss Blackberry'
-    miss_blackberry = await async_actress_manager.find(miss_blackberry)
-    miss_blackberry.pop('_id', None)
-    assert miss_blackberry == {
-        'link': 'http://www.pornteengirl.com/model/miss-blackberry.html',
-        'debut_year': 2015,
-        'name': 'Miss Blackberry'
-    }
+        miss_blackberry = 'Miss Blackberry'
+        miss_blackberry = await async_actress_manager.find(miss_blackberry)
+        miss_blackberry.pop('_id', None)
+        assert miss_blackberry == {
+            'link': 'http://www.pornteengirl.com/model/miss-blackberry.html',
+            'debut_year': 2015,
+            'name': 'Miss Blackberry'
+        }

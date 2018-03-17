@@ -2,14 +2,6 @@
 
 {% block custom_css %}
     <style type="text/css">
-        .center-text {
-            text-align: center;
-        }
-
-        .big-font {
-            font-size: 36px;
-        }
-
         .center-form {
             justify-content: center;
         }
@@ -19,7 +11,7 @@
 
 {% block custom_jss %}
     <script>
-        $('#pick-random').click(function (e) {
+        $('.pick-random').click(function (e) {
             e.preventDefault();
 
             $.ajax({
@@ -56,7 +48,7 @@
             </form>
 
             <p class="big-font">OR</p>
-            <a id="pick-random" class="link-btn big-button primary-font solid-border primary-color">
+            <a class="pick-random link-btn big-button primary-font solid-border primary-color">
                 <i class="fa fa-sync"></i> Pick random
             </a>
         {% endif %}

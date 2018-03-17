@@ -21,13 +21,39 @@
             margin: 0 5px;
         }
 
+        .floating-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 70px;
+            height: 70px;
+            border-radius: 50px;
+            text-align: center;
+        }
+
+        .floating-fa {
+            margin-top: 22px;
+        }
+
+        .spacer {
+            height: 100px;
+        }
+
+        .small-spacer {
+            height: 10px;
+        }
+
+        .floating-btn:hover {
+            background-color: #FFCAD4;
+            cursor: pointer;
+        }
 
     </style>
 {% endblock %}
 
 {% block custom_jss %}
     <script>
-        $('#pick-random').click(function (e) {
+        $('.pick-random').click(function (e) {
             e.preventDefault();
 
             $.ajax({
@@ -52,31 +78,44 @@
             </button>
         </form>
 
-        <a id="pick-random" class="link-btn big-button primary-font solid-border primary-color">
+        <a class="pick-random link-btn big-button primary-font solid-border primary-color">
             <i class="fa fa-sync"></i> Pick random
         </a>
     </div>
-    <div class="video-container">
-        {% for video in videos %}
-            <div class="video-item solid-border">
-                <a href="{{ video.url }}">
-                    <img class="link-image" src="{{ video.preview }}">
-                </a>
+    {% if videos %}
+        <div class="video-container">
+            {% for video in videos %}
+                <div class="video-item solid-border">
+                    <a href="{{ video.url }}">
+                        <img class="link-image" src="{{ video.preview }}">
+                    </a>
 
-                <div class="video-controls ">
-                    <div class="video-buttons">
-                        <a class="vk-btn btn-small small-font primary-color solid-border" href="{{ video.url }}">
-                            <i class="fab fa-vk"></i>
-                            Full
-                        </a>
-                        <a class="btn-small small-font primary-color solid-border" href="{{ video.mobile_url }}">
-                            <i class="fa fa-mobile-alt"></i>
-                            Mobile
-                        </a>
+                    <div class="video-controls ">
+                        <div class="video-buttons">
+                            <a class="vk-btn btn-small small-font primary-color solid-border" href="{{ video.url }}">
+                                <i class="fab fa-vk"></i>
+                                Full
+                            </a>
+                            <a class="btn-small small-font primary-color solid-border" href="{{ video.mobile_url }}">
+                                <i class="fa fa-mobile-alt"></i>
+                                Mobile
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% endfor %}
 
-        {% endfor %}
+        </div>
+    {% else %}
+        <div class="small-spacer"></div>
+        <div class="primary-font center-text">
+            No videos found.
+        </div>
+    {% endif %}
+    <div class="spacer"></div>
+    <div>
+        <a class="pick-random floating-btn primary-color solid-border  primary-font">
+            <i class="fa fa-sync floating-fa"></i>
+        </a>
     </div>
 {% endblock %}

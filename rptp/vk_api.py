@@ -6,7 +6,7 @@ import aiohttp
 from rptp.config import APP_ID, API_VERSION, AUTH_REDIRECT_URI, CLIENT_SECRET
 
 
-async def request_videos(query, token):
+async def request_videos(query, token, **kwargs):
     # https://vk.com/dev/api_requests
     # https://vk.com/dev/video.search
     params = {
@@ -16,8 +16,10 @@ async def request_videos(query, token):
         'adult': 1,
         'filters': 'mp4, long',
         'hd': 1,
+        'count': 100,
 
-        'v': API_VERSION
+        'v': API_VERSION,
+        **kwargs
     }
     encoded = urlencode(params)
     url = f"https://api.vk.com/method/video.search?{encoded}"

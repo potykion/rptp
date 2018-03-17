@@ -21,10 +21,18 @@
             margin: 0 5px;
         }
 
-        .floating-btn {
-            position: fixed;
+        .right-floating {
             bottom: 20px;
             right: 20px;
+        }
+
+        .left-floating {
+            bottom: 20px;
+            left: 20px;
+        }
+
+        .floating-btn {
+            position: fixed;
             width: 70px;
             height: 70px;
             border-radius: 50px;
@@ -48,6 +56,10 @@
             cursor: pointer;
         }
 
+        .up-btn {
+            display: none;
+        }
+
     </style>
 {% endblock %}
 
@@ -62,8 +74,31 @@
                 .done(function (data) {
                     window.location = '/videos?query=' + data.name;
                 });
+        });
 
-        })
+        window.onscroll = function () {
+            scrollFunction()
+        };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                $('.up-btn').show();
+            } else {
+                $('.up-btn').hide();
+            }
+        }
+
+        function topFunction() {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        }
+
+        $('.up-btn').click(
+            function (e) {
+                e.preventDefault();
+                topFunction();
+            }
+        )
     </script>
 {% endblock %}
 
@@ -114,8 +149,12 @@
     {% endif %}
     <div class="spacer"></div>
     <div>
-        <a class="pick-random floating-btn primary-color solid-border  primary-font">
+        <a class="pick-random floating-btn primary-color solid-border  primary-font right-floating">
             <i class="fa fa-sync floating-fa"></i>
+        </a>
+
+        <a class="up-btn floating-btn primary-color solid-border  primary-font left-floating">
+            <i class="fa fa-arrow-up floating-fa"></i>
         </a>
     </div>
 {% endblock %}

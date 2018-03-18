@@ -15,6 +15,7 @@ idna-ssl==1.0.0
 Jinja2==2.10
 lxml==4.2.0
 MarkupSafe==1.0
+motor==1.2.1
 multidict==4.1.0
 parse==1.8.2
 pluggy==0.6.0

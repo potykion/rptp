@@ -1,3 +1,5 @@
+import re
+
 from rptp.config import MONGO_DB, MONGO_URL
 
 
@@ -11,7 +13,9 @@ class AsyncActressManager:
         self.actresses = db.actresses
 
     async def find(self, name):
-        return await self.actresses.find_one({'name': name})
+        return await self.actresses.find_one(
+            {'name': re.compile(name, re.IGNORECASE)}
+        )
 
     async def pick_random(self, with_id=True):
         actresses = await self.actresses.aggregate([
@@ -31,7 +35,7 @@ class AsyncActressManager:
 
     async def mark_no_videos(self, name):
         return await self.actresses.update_one(
-            {'name': name},
+            {'name': re.compile(name, re.IGNORECASE)},
             {'$set': {'has_video': False}}
         )
 

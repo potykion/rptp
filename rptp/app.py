@@ -52,8 +52,7 @@ async def pick_random_api_view(request):
 @required_query_params(['query'])
 async def report_api_view(request):
     query = request.args.get('query')
-    actress = await actress_manager.find(query)
-    await actress_manager.mark_no_videos(actress)
+    await actress_manager.mark_no_videos(query)
     return response.json({
         'success': True
     })

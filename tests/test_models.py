@@ -34,4 +34,4 @@ class TestModels(ActressFixtures):
         async_actress_manager.mark_no_videos(actress_name)
 
         actress = await async_actress_manager.find(actress_name)
-        assert not actress['has_videos']
+        assert actress['has_videos'] is False

@@ -36,7 +36,7 @@ class AsyncActressManager:
     async def mark_no_videos(self, name):
         return await self.actresses.update_one(
             {'name': re.compile(name, re.IGNORECASE)},
-            {'$set': {'has_video': False}}
+            {'$set': {'has_videos': False}}
         )
 
 

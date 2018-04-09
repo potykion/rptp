@@ -7,7 +7,7 @@ import pytest
 
 from rptp.app import app
 from rptp.config import BASE_DIR, STATIC_DIR
-from rptp.models import get_sync_client, upload_actresses
+from rptp.models import get_sync_client, upload_actresses, AsyncActressManager
 from tests.fixtures import ActressFixtures
 
 
@@ -68,7 +68,6 @@ class TestViews(ActressFixtures):
             'duration': '0:22:52'
         }
 
-
     def test_auth_template_view_with_code(self, vk_token_response, vk_token, vk_videos):
         """
         Given code,
@@ -89,7 +88,6 @@ class TestViews(ActressFixtures):
         response_cookies.load(response.headers.get('Set-Cookie', {}))
         assert response_cookies['access_token'].value == vk_token
 
-
     def test_pick_random_api_view(self, actresses, vk_token):
         """
         Given actresses,
@@ -98,3 +96,14 @@ class TestViews(ActressFixtures):
         """
         request, response = app.test_client.get(f'/api/pick_random?token={vk_token}')
         assert set(response.json.keys()) == {'name', 'debut_year', 'link'}
+
+    async def test_report_api_view(self, actresses, vk_token, async_actress_manager: AsyncActressManager):
+        """
+        Given actress name,
+        When make request to report_api_view,
+        Then actress has_videos flag set to False.
+        """
+        actress_name = 'Cynthia fox'
+        request, response = app.test_client.get(f'/api/report?query={actress_name}&token={vk_token}')
+        actress = await async_actress_manager.find(actress_name)
+        assert actress['has_videos'] is False

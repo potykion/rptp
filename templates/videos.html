@@ -60,6 +60,10 @@
             display: none;
         }
 
+        .link {
+            color: black;
+        }
+
     </style>
 {% endblock %}
 
@@ -68,10 +72,9 @@
         $('.pick-random').click(function (e) {
             e.preventDefault();
 
-            $.ajax({
-                url: '/api/pick_random'
-            })
-                .done(function (data) {
+            $
+                .ajax({url: '/api/pick_random'})
+                .done(data => {
                     window.location = '/videos?query=' + data.name;
                 });
         });
@@ -98,7 +101,18 @@
                 e.preventDefault();
                 topFunction();
             }
-        )
+        );
+
+        $('#report').click(
+            function (e) {
+                e.preventDefault();
+                $
+                    .ajax('/api/report?query={{ query }}')
+                    .then(() => {
+                        $('.pick-random').trigger('click');
+                    });
+            }
+        );
     </script>
 {% endblock %}
 
@@ -145,6 +159,7 @@
         <div class="small-spacer"></div>
         <div class="primary-font center-text">
             No videos found.
+            <a id="report" class="link" href="#">Report</a>
         </div>
     {% endif %}
     <div class="spacer"></div>

@@ -5,7 +5,7 @@ from sanic import Sanic, response
 
 from rptp.auth import VKResponseAuthorizer, extract_auth_data
 from rptp.config import TEMPLATES_DIR, STATIC_DIR, MONGO_DB
-from rptp.decorators import browser_authorization_required, required_query_params
+from rptp.decorators import browser_authorization_required, required_query_params, api_authorization_required
 from rptp.models import AsyncActressManager, get_async_client, get_db
 from rptp.getters import get_videos
 
@@ -29,6 +29,7 @@ def init(sanic, loop):
 
 
 @app.route('/api/videos')
+@api_authorization_required()
 async def video_api_view(request):
     query = request.args.get('query')
     count = request.args.get('count', 100)
@@ -40,10 +41,22 @@ async def video_api_view(request):
 
 
 @app.route('/api/pick_random')
+@api_authorization_required()
 async def pick_random_api_view(request):
     actress = await actress_manager.pick_random(with_id=False)
-
     return response.json(actress)
+
+
+@app.route('/api/report')
+@api_authorization_required()
+@required_query_params(['query'])
+async def report_api_view(request):
+    query = request.args.get('query')
+    actress = await actress_manager.find(query)
+    await actress_manager.mark_no_videos(actress)
+    return response.json({
+        'success': True
+    })
 
 
 @app.route('/videos')

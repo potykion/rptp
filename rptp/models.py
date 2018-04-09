@@ -14,9 +14,11 @@ class AsyncActressManager:
         return await self.actresses.find_one({'name': name})
 
     async def pick_random(self, with_id=True):
-        actresses = await self.actresses.aggregate(
-            [{'$sample': {'size': 1}}]
-        ).to_list(1)
+        actresses = await self.actresses.aggregate([
+            {'$match': {"has_video": {'$ne': False}}},
+            {'$sample': {'size': 1}}
+        ]).to_list(1)
+
         actress = actresses[0]
 
         if not with_id:
@@ -26,6 +28,12 @@ class AsyncActressManager:
 
     async def count(self):
         return await self.actresses.count()
+
+    async def mark_no_videos(self, name):
+        return await self.actresses.update_one(
+            {'name': name},
+            {'$set': {'has_video': False}}
+        )
 
 
 def get_db(db_name=None, client=None):

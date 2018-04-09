@@ -90,11 +90,11 @@ class TestViews(ActressFixtures):
         assert response_cookies['access_token'].value == vk_token
 
 
-    def test_pick_random_api_view(self, actresses):
+    def test_pick_random_api_view(self, actresses, vk_token):
         """
         Given actresses,
         When make request to pick_random_api_view,
         Then response contains random actress.
         """
-        request, response = app.test_client.get('/api/pick_random')
+        request, response = app.test_client.get(f'/api/pick_random?token={vk_token}')
         assert set(response.json.keys()) == {'name', 'debut_year', 'link'}

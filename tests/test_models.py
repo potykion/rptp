@@ -1,30 +1,9 @@
-import json
-import os
-
-import pytest
-
-from rptp.config import STATIC_DIR
-from rptp.models import get_sync_client, upload_actresses, get_async_client, AsyncActressManager
+from rptp.models import AsyncActressManager
 from tests.fixtures import ActressFixtures
 
 
-@pytest.fixture()
-def test_db():
-    db_name = 'test'
-    yield db_name
-    client = get_sync_client()
-    client.drop_database(db_name)
-
-
-@pytest.fixture()
-def actresses(test_db):
-    with open(os.path.join(STATIC_DIR, 'json', 'actresses.json')) as f:
-        actresses_to_upload = json.load(f)
-        upload_actresses(actresses_to_upload, test_db)
-
-
 class TestModels(ActressFixtures):
-    async def test_upload_actresses(self, test_db, actresses, async_actress_manager):
+    async def test_upload_actresses(self, actresses, async_actress_manager: AsyncActressManager):
         """
         Given parsed actresses,
         When insert them to actress collection,
@@ -42,3 +21,17 @@ class TestModels(ActressFixtures):
             'debut_year': 2015,
             'name': 'Miss Blackberry'
         }
+
+    async def test_mark_no_videos(self, actresses, async_actress_manager: AsyncActressManager):
+        """
+        Given actresses,
+        When report actress,
+        Then actress has_videos flag is false.
+        """
+        actress = await async_actress_manager.find('Wilda')
+
+        actress_name = actress['name']
+        async_actress_manager.mark_no_videos(actress_name)
+
+        actress = await async_actress_manager.find(actress_name)
+        assert not actress['has_videos']

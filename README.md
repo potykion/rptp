@@ -1,6 +1,5 @@
-# About
+# RPTP
 
-RPTP is a service for VK video search over 4000 pornstars.
-
+Watch random adult videos from VK.
 
 

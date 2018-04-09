@@ -1,6 +1,6 @@
 from functools import wraps
 
-from sanic.response import redirect
+from sanic.response import redirect, json
 
 from rptp.auth import extract_auth_data
 from rptp.cookie import save_token_data
@@ -22,6 +22,26 @@ def browser_authorization_required():
                 return response
             else:
                 return redirect('/index')
+
+        return decorated_function
+
+    return decorator
+
+
+def api_authorization_required():
+    """
+    Extract token from request, if token not present return error response.
+    """
+
+    def decorator(f):
+        @wraps(f)
+        async def decorated_function(request, *args, **kwargs):
+            token = extract_auth_data(request)
+
+            if token:
+                return await f(request, *args, **kwargs)
+            else:
+                return json({'error': 'No authorization token passed.'})
 
         return decorated_function
 

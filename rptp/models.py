@@ -17,6 +17,14 @@ class AsyncActressManager:
             {'name': re.compile(name, re.IGNORECASE)}
         )
 
+    async def filter(self, **conditions):
+        return await self.actresses.aggregate([
+            {'$match': conditions},
+        ]).to_list()
+
+    async def filter_without_videos(self):
+        return await self.filter(has_video=False)
+
     async def pick_random(self, with_id=True):
         actresses = await self.actresses.aggregate([
             {'$match': {"has_video": {'$ne': False}}},
@@ -33,10 +41,10 @@ class AsyncActressManager:
     async def count(self):
         return await self.actresses.count()
 
-    async def mark_no_videos(self, name):
+    async def mark_has_videos(self, name, has_videos=True):
         return await self.actresses.update_one(
             {'name': re.compile(name, re.IGNORECASE)},
-            {'$set': {'has_videos': False}}
+            {'$set': {'has_videos': has_videos}}
         )
 
 

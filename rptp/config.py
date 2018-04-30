@@ -21,4 +21,4 @@ API_VERSION = os.environ.get(
 
 # MONGO
 MONGO_URL = os.environ['MONGO_URL']
-MONGO_DB = os.getenv('MONGO_DB', 'rptp')
+MONGO_DB = os.environ['MONGO_DB']

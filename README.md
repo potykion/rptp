@@ -36,4 +36,8 @@ pip install .
 
 To run tests or app:
 
-1. Set envs: VK_APP_ID, VK_CLIENT_SECRET, MONGO_URL
+1. Set envs:
+- VK_APP_ID - vk application id (can be found in vk app settings)
+- VK_CLIENT_SECRET - vk secure key (can be found in vk app settings)
+- MONGO_URL - mongodb connection string
+- MONGO_DB - mongodb database name

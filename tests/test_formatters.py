@@ -1,17 +1,4 @@
-import json
-
-import os
-import pytest
-
-from rptp.config import BASE_DIR
 from rptp.formatters import format_video
-
-
-@pytest.fixture()
-def vk_video():
-    path = os.path.join(BASE_DIR, 'static', 'json', 'vk_video.json')
-    with open(path) as f:
-        return json.load(f)
 
 
 def test_video_formatter(vk_video):

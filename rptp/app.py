@@ -6,7 +6,7 @@ from sanic import Sanic, response
 from rptp.auth import VKResponseAuthorizer, extract_auth_data
 from rptp.config import TEMPLATES_DIR, STATIC_DIR, MONGO_DB
 from rptp.decorators import browser_authorization_required, required_query_params, api_authorization_required
-from rptp.models import AsyncActressManager, get_async_client, get_db
+from rptp.models import AsyncActressManager, get_async_client, get_db, ActressPicker, ActressUpdater
 from rptp.getters import get_videos
 
 app = Sanic(__name__)
@@ -18,14 +18,20 @@ jinja_env = Environment(
     enable_async=True
 )
 
+actress_manager: AsyncActressManager
+actress_picker: ActressPicker
+actress_updater: ActressUpdater
+
 
 @app.listener('before_server_start')
 def init(sanic, loop):
-    global actress_manager
+    global actress_manager, actress_picker, actress_updater
 
     client = get_async_client()
     db = get_db(MONGO_DB, client)
     actress_manager = AsyncActressManager(db)
+    actress_picker = ActressPicker(db)
+    actress_updater = ActressUpdater(db)
 
 
 @app.route('/api/videos')
@@ -43,7 +49,7 @@ async def video_api_view(request):
 @app.route('/api/pick_random')
 @api_authorization_required()
 async def pick_random_api_view(request):
-    actress = await actress_manager.pick_random(with_id=False)
+    actress = await actress_picker.pick_random(with_id=False)
     return response.json(actress)
 
 
@@ -52,7 +58,7 @@ async def pick_random_api_view(request):
 @required_query_params(['query'])
 async def report_api_view(request):
     query = request.args.get('query')
-    await actress_manager.mark_has_videos(query, False)
+    await actress_updater.mark_has_videos(query, False)
     return response.json({
         'success': True
     })

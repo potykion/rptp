@@ -5,6 +5,8 @@ from typing import Dict, Iterable, Optional, List
 
 from requests_html import HTMLSession
 
+from rptp.models import get_db, insert_actresses
+
 
 def parse_debut_page(years: Optional[List] = None) -> Iterable[Dict]:
     url = 'http://www.pornteengirl.com/debutyear/debut.html'
@@ -28,3 +30,9 @@ def parse_debut_page(years: Optional[List] = None) -> Iterable[Dict]:
             }
             for actress_tag in actress_tags
         )
+
+
+if __name__ == '__main__':
+    actresses = parse_debut_page()
+    db = get_db()
+    insert_actresses(db, actresses)

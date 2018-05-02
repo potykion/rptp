@@ -9,7 +9,7 @@ def test_parse_debut_page():
     Then Miss Blackberry exists.
     """
     debut_year = 2015
-    actresses = list(parse_debut_page([debut_year]))
+    actresses = parse_debut_page([debut_year])
 
     miss_blackberry = next(
         actress

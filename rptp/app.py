@@ -1,12 +1,13 @@
 import json
 
 from jinja2 import Environment, select_autoescape, FileSystemLoader
+from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 from sanic import Sanic, response
 
 from rptp.auth import VKResponseAuthorizer, extract_auth_data
-from rptp.config import TEMPLATES_DIR, STATIC_DIR, MONGO_DB
+from rptp.config import TEMPLATES_DIR, STATIC_DIR, MONGO_DB, MONGO_URL
 from rptp.decorators import browser_authorization_required, required_query_params, api_authorization_required
-from rptp.models import AsyncActressManager, get_async_client, get_db, ActressPicker, ActressUpdater
+from rptp.async_actress import pick_random, mark_has_videos
 from rptp.getters import get_videos
 
 app = Sanic(__name__)
@@ -18,20 +19,15 @@ jinja_env = Environment(
     enable_async=True
 )
 
-actress_manager: AsyncActressManager
-actress_picker: ActressPicker
-actress_updater: ActressUpdater
+db: AsyncIOMotorDatabase
 
 
 @app.listener('before_server_start')
 def init(sanic, loop):
-    global actress_manager, actress_picker, actress_updater
+    global db
 
-    client = get_async_client()
-    db = get_db(MONGO_DB, client)
-    actress_manager = AsyncActressManager(db)
-    actress_picker = ActressPicker(db)
-    actress_updater = ActressUpdater(db)
+    client = AsyncIOMotorClient(MONGO_URL)
+    db = client[MONGO_DB]
 
 
 @app.route('/api/videos')
@@ -49,7 +45,7 @@ async def video_api_view(request):
 @app.route('/api/pick_random')
 @api_authorization_required()
 async def pick_random_api_view(request):
-    actress = await actress_picker.pick_random(with_id=False)
+    actress = await pick_random(db, with_id=False)
     return response.json(actress)
 
 
@@ -58,7 +54,7 @@ async def pick_random_api_view(request):
 @required_query_params(['query'])
 async def report_api_view(request):
     query = request.args.get('query')
-    await actress_updater.mark_has_videos(query, False)
+    await mark_has_videos(db, query, False)
     return response.json({
         'success': True
     })

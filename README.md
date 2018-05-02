@@ -41,3 +41,22 @@ To run tests or app:
 - VK_CLIENT_SECRET - vk secure key (can be found in vk app settings)
 - MONGO_URL - mongodb connection string
 - MONGO_DB - mongodb database name
+
+2. Run:
+
+To run tests:
+```
+pytest tests
+```
+
+To run app:
+```
+python main.py
+```
+
+# References
+
+- [VK API](https://vk.com/dev/methods)
+- [Sanic API](http://sanic.readthedocs.io/en/latest/)
+- [Motor API](https://motor.readthedocs.io/en/stable/tutorial-asyncio.html)
+- [PyMongo API](https://api.mongodb.com/python/current/tutorial.html)

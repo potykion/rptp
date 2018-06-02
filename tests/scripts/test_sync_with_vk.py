@@ -1,6 +1,6 @@
 from asynctest import patch, CoroutineMock
 
-from rptp.scripts.sync import sync_actresses_without_videos
+from rptp.scripts.sync_with_vk import sync_actresses_without_videos
 
 
 async def test_sync_actresses_without_videos(loop, sync_db, actress_without_videos, vk_token):

@@ -1,4 +1,4 @@
-from rptp.scripts.scrap import parse_debut_page
+from rptp.scripts.scrap_ptg import parse_debut_page
 
 
 def test_parse_debut_page():

@@ -5,7 +5,7 @@ import pytest
 from motor.motor_asyncio import AsyncIOMotorClient
 
 from rptp.app import app
-from rptp.config import STATIC_DIR, BASE_DIR, MONGO_DB, MONGO_URL
+from rptp.config import STATIC_DIR, BASE_DIR, MONGO_URL, MONGO_DB
 from rptp.models import insert_actresses, get_client
 
 

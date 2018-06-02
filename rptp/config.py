@@ -1,6 +1,10 @@
 import logging
 import os
 
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())
+
 # GENERAL
 ENVIRONMENT = os.environ['ENVIRONMENT']
 
@@ -17,7 +21,7 @@ AUTH_REDIRECT_URI = os.environ.get(
     'https://rptp.herokuapp.com/auth'
 )
 API_VERSION = os.environ.get('VK_API_VERSION', 5.73)
-TOKEN = os.getenv('VK_TOKEN')
+VK_TOKEN = os.getenv('VK_TOKEN')
 VK_REQUESTS_FREQUENCY = 1 / 3
 
 # MONGO

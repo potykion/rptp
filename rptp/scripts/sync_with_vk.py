@@ -5,9 +5,8 @@ from operator import itemgetter
 
 from pymongo.collection import Collection
 
-from rptp.config import VK_TOKEN, VK_REQUESTS_FREQUENCY, ENVIRONMENT
-from rptp.getters import get_videos
-from rptp.models import get_db
+from rptp.config import VK_TOKEN
+from rptp.models import get_db, check_actress_has_videos
 
 
 async def sync_actresses_without_videos(db, token):
@@ -36,13 +35,22 @@ async def sync_actresses_without_videos(db, token):
     logging.info(f"Actress with videos:\n{actresses_with_videos_str}")
 
 
-async def check_actress_has_videos(actress, token):
-    videos = await get_videos(actress, token)
+async def sync_all_actresses(db, token):
+    actresses: Collection = db.actresses
 
-    if ENVIRONMENT != "test":
-        await asyncio.sleep(VK_REQUESTS_FREQUENCY)
+    actresses_with_videos = (
+        actress for actress in actresses.find() if actress.get("has_videos", True)
+    )
 
-    return bool(videos)
+    logging.info("Searching for actress without videos...")
+
+    for actress in actresses_with_videos:
+        has_videos = await check_actress_has_videos(actress["name"], token)
+        if not has_videos:
+            actresses.update_one(
+                {"_id": actress["_id"]}, {"$set": {"has_videos": False}}
+            )
+            logging.info(actress["name"])
 
 
 if __name__ == "__main__":

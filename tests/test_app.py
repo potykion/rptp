@@ -15,19 +15,21 @@ def test_video_api_view(vk_videos):
     token = 'ec95bd6b0fa49ed5ea3cdd214b9d49b29ed637bd8c96e4018c0e4b09ebc9de38f10d5484f7af3de0a41ad'
 
     with patch('rptp.vk_api.request_videos', CoroutineMock(return_value=vk_videos)):
-        _, response = app.test_client.get(
-            '/api/videos',
-            params={'query': query},
-            headers={'Authorization': token}
-        )
+        with patch('rptp.vk_api.check_video_is_blocked', CoroutineMock(return_value=True)):
+            _, response = app.test_client.get(
+                '/api/videos',
+                params={'query': query},
+                headers={'Authorization': token}
+            )
 
-        data = response.json
+            data = response.json
 
     assert data[0] == {
         'preview': 'https://pp.userapi.com/c627623/v627623889/49c74/1f_JKV_2jBE.jpg',
         'url': 'https://vk.com/video-81447889_456239209',
         'mobile_url': 'https://m.vk.com/video-81447889_456239209',
-        'duration': '0:22:52'
+        'duration': '0:22:52',
+        "blocked": True
     }
 
 

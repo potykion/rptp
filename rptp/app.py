@@ -4,10 +4,10 @@ from jinja2 import Environment, select_autoescape, FileSystemLoader
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 from sanic import Sanic, response
 
+from rptp.async_actress import pick_random, mark_has_videos
 from rptp.auth import VKResponseAuthorizer, extract_auth_data
 from rptp.config import TEMPLATES_DIR, STATIC_DIR, MONGO_DB, MONGO_URL
 from rptp.decorators import browser_authorization_required, required_query_params, api_authorization_required
-from rptp.async_actress import pick_random, mark_has_videos
 from rptp.getters import get_videos
 
 app = Sanic(__name__)

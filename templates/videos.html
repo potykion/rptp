@@ -135,7 +135,7 @@
         <div class="video-container">
             {% for video in videos %}
                 <div class="video-item solid-border">
-                    <a href="{{ video.url }}">
+                    <a href="{{ video.mobile_url if video.blocked else video.url }}">
                         <img class="link-image" src="{{ video.preview }}">
                     </a>
 

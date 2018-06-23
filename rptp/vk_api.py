@@ -57,5 +57,12 @@ async def request_token_data(code):
 
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as result:
-            response = await result.json()
-            return response
+            response_json = await result.json()
+            return response_json
+
+
+async def check_video_is_blocked(video_url):
+    async with aiohttp.ClientSession() as session:
+        async with session.get(video_url) as response:
+            # 451 = Unavailable For Legal Reasons
+            return response.status == 451

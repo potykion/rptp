@@ -11,7 +11,7 @@ To install dependencies:
 pip install -r requirements.txt
 ```
 
-## Sanic
+### Sanic
 
 To install Sanic on Windows:
 
@@ -30,6 +30,13 @@ set SANIC_NO_UJSON=true
 ```
 cd sanic
 pip install .
+```
+
+### Pre-commit hooks
+
+Install pre-commit hooks via:
+```
+pre-commit install
 ```
 
 # Run

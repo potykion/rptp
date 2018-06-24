@@ -1,4 +1,5 @@
 import asyncio
+import os
 from itertools import tee
 from typing import Dict, Iterable
 
@@ -36,6 +37,7 @@ def insert_actresses(
 async def check_actress_has_videos(actress, token):
     videos = await get_videos(actress, token)
 
-    await asyncio.sleep(VK_REQUESTS_FREQUENCY)
+    if os.getenv("ENVIRONMENT") != "test":
+        await asyncio.sleep(VK_REQUESTS_FREQUENCY)
 
     return bool(videos)

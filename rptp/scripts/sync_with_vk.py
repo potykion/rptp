@@ -1,4 +1,5 @@
 import asyncio
+import itertools
 import logging
 from contextlib import closing
 from operator import itemgetter
@@ -8,7 +9,7 @@ from pymongo.collection import Collection
 from rptp.config import VK_TOKEN
 from rptp.models import get_db, check_actress_has_videos
 
-
+# @profile
 async def sync_actresses_without_videos(db, token):
     actresses: Collection = db.actresses
     actresses_without_videos = list(actresses.find({"has_videos": False}))
@@ -18,11 +19,11 @@ async def sync_actresses_without_videos(db, token):
     )
     logging.info(f"Actress without videos:\n{actresses_without_videos_str}")
 
-    actresses_with_videos = [
-        actress
+    has_videos_vector = await asyncio.gather(*(
+        check_actress_has_videos(actress["name"], token)
         for actress in actresses_without_videos
-        if await check_actress_has_videos(actress["name"], token)
-    ]
+    ))
+    actresses_with_videos = itertools.compress(actresses_without_videos, has_videos_vector)
 
     actresses_with_videos_ids = list(map(itemgetter("_id"), actresses_with_videos))
     actresses.update_many(

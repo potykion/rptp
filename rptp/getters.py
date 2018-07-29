@@ -15,8 +15,4 @@ async def get_videos(query, token, **kwargs) -> List[Dict]:
     adult_videos = filterfalse(itemgetter("can_add"), vk_videos)
     videos = format_videos(adult_videos)
 
-    video_urls = map(operator.itemgetter('url'), videos)
-    blocked_map = await asyncio.gather(*map(check_video_is_blocked, video_urls))
-    videos = [{**video, 'blocked': blocked} for video, blocked in zip(videos, blocked_map)]
-
     return videos

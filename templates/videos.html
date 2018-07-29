@@ -113,6 +113,29 @@
                     });
             }
         );
+
+        $(".video-url").mousedown(
+            function (e) {
+                {# left or middle mouse click check #}
+                if( e.which > 2 )
+                    return;
+
+                e.preventDefault();
+
+                $
+                    .ajax({
+                        url: this.href,
+                        error: () => {
+                            window.open(
+                                this.href.replace("vk", "m.vk"),
+                                (e.ctrlKey || e.which === 2) ? "_blank" : "_self"
+                            );
+                        }
+                    });
+            }
+        );
+
+
     </script>
 {% endblock %}
 
@@ -135,7 +158,7 @@
         <div class="video-container">
             {% for video in videos %}
                 <div class="video-item solid-border">
-                    <a href="{{ video.mobile_url if video.blocked else video.url }}">
+                    <a class="video-url" href="{{ video.url }}">
                         <img class="link-image" src="{{ video.preview }}">
                     </a>
 

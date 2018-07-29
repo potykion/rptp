@@ -15,13 +15,12 @@ def browser_authorization_required():
         @wraps(f)
         async def decorated_function(request, *args, **kwargs):
             token = extract_auth_data(request)
-
-            if token:
-                response = await f(request, *args, **kwargs)
-                save_token_data(response, token)
-                return response
-            else:
+            if not token:
                 return redirect('/index')
+
+            response = await f(request, *args, **kwargs)
+            save_token_data(response, token)
+            return response
 
         return decorated_function
 
@@ -37,11 +36,10 @@ def api_authorization_required():
         @wraps(f)
         async def decorated_function(request, *args, **kwargs):
             token = extract_auth_data(request)
-
-            if token:
-                return await f(request, *args, **kwargs)
-            else:
+            if not token:
                 return json({'error': 'No authorization token passed.'})
+
+            return await f(request, *args, **kwargs)
 
         return decorated_function
 

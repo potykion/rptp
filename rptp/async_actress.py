@@ -1,12 +1,14 @@
 import re
+from typing import Dict
 
 from motor.motor_asyncio import AsyncIOMotorDatabase
+from pymongo.results import UpdateResult
 
 
 async def pick_random(
         db: AsyncIOMotorDatabase,
-        with_id=True
-):
+        with_id: bool = True
+) -> Dict:
     actresses = await db.actresses.aggregate([
         {'$match': {"has_video": {'$ne': False}}},
         {'$sample': {'size': 1}}
@@ -23,8 +25,8 @@ async def pick_random(
 async def mark_has_videos(
         db: AsyncIOMotorDatabase,
         name: str,
-        has_videos=True
-):
+        has_videos: bool = True
+) -> UpdateResult:
     return await db.actresses.update_one(
         {'name': re.compile(name, re.IGNORECASE)},
         {'$set': {'has_videos': has_videos}}

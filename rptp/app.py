@@ -3,9 +3,11 @@ import json
 from jinja2 import Environment, select_autoescape, FileSystemLoader
 from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 from sanic import Sanic, response
+from sanic.request import Request
+from sanic.response import HTTPResponse
 
 from rptp.async_actress import pick_random, mark_has_videos
-from rptp.auth import VKResponseAuthorizer, extract_auth_data
+from rptp.auth import extract_auth_data, create_authorization_template_response, create_authorized_template_response
 from rptp.config import TEMPLATES_DIR, STATIC_DIR, MONGO_DB, MONGO_URL
 from rptp.decorators import browser_authorization_required, required_query_params, api_authorization_required
 from rptp.getters import get_videos
@@ -77,22 +79,15 @@ async def videos_template_view(request):
 
 @app.route('/')
 @app.route('/index')
-async def index_template_view(request):
+async def index_template_view(request: Request) -> HTTPResponse:
     template = jinja_env.get_template('index.html')
 
     code = request.args.get('code')
-    if code:
-        rendered = await template.render_async()
-        response_ = response.html(rendered)
+    auth_data_exists = code or extract_auth_data(request)
 
-        authorizer = VKResponseAuthorizer()
-        response_ = await authorizer.authorize_response(response_, code)
-
-    elif extract_auth_data(request):
-        rendered = await template.render_async()
-        response_ = response.html(rendered)
+    if auth_data_exists:
+        response_ = await create_authorized_template_response(template, code)
     else:
-        authorizer = VKResponseAuthorizer()
-        response_ = await authorizer.create_authorization_response(template)
+        response_ = await create_authorization_template_response(template)
 
     return response_

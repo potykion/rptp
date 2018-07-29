@@ -19,10 +19,10 @@ async def sync_actresses_without_videos(db, token):
     )
     logging.info(f"Actress without videos:\n{actresses_without_videos_str}")
 
-    has_videos_vector = await asyncio.gather(*(
-        check_actress_has_videos(actress["name"], token)
+    has_videos_vector = [
+        await check_actress_has_videos(actress["name"], token)
         for actress in actresses_without_videos
-    ))
+    ]
     actresses_with_videos = itertools.compress(actresses_without_videos, has_videos_vector)
 
     actresses_with_videos_ids = list(map(itemgetter("_id"), actresses_with_videos))

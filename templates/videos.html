@@ -114,28 +114,6 @@
             }
         );
 
-        $(".video-url").mousedown(
-            function (e) {
-                {# left or middle mouse click check #}
-                if( e.which > 2 )
-                    return;
-
-                e.preventDefault();
-
-                $
-                    .ajax({
-                        url: this.href,
-                        error: () => {
-                            window.open(
-                                this.href.replace("vk", "m.vk"),
-                                (e.ctrlKey || e.which === 2) ? "_blank" : "_self"
-                            );
-                        }
-                    });
-            }
-        );
-
-
     </script>
 {% endblock %}
 
